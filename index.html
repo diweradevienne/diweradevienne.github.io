@@ -21,7 +21,7 @@
 const REGLAGES = {
   email: "diwera.devienne@gmail.com", // adresse où arrivent les commandes
   paypal: "https://paypal.me/diweradevienne", // son lien PayPal (trouvé sur sa page Paiement du Wix) — paiement à privilégier
-  rib: "",              // nom d'un fichier image du RIB posé à côté de cette page, ex. "rib.jpg" (à compléter)
+  rib: "rib.png",       // RIB affiché après la commande (adresse personnelle cachée), décision de Diwéra du 20/11/2026
   nomLegal: "Diwéra Devienne", // prénom et nom (confirmés par elle le 20/11)
   siret: "837 678 853 00032", // numéro SIRET (trouvé sur son site Wix)
   hebergeur: "GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis", // hébergeur
@@ -725,10 +725,8 @@ function vuePaiement(prenom, mail){
   $("#contenuDlg").innerHTML = `<h2>Merci ${prenom}</h2>
     <div class="sur-titre">Votre référence</div><p class="ref">${ref}</p>
     <div class="encadre"><b>1 — Envoyez votre commande</b><br>
-      ${mailto ? `<a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>
-      <br><small style="color:var(--doux)">Ou copiez ce texte et envoyez-le à <b>${REGLAGES.email}</b> :</small>` : `<div class="attention">Adresse e-mail de la boutique à compléter dans les réglages.</div>`}
-      <textarea readonly>${texte}</textarea>
-      <button class="lien" data-a="copier">Copier le texte</button></div>
+      <a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>
+      <br><small style="color:var(--doux)">Un e-mail tout prêt s'ouvre : il suffit de l'envoyer.</small></div>
     <div class="encadre"><b>2 — Payez ${euros(montant)}</b><br>
       De préférence par PayPal, le plus rapide :<br>
       ${lienPaypal ? `<a class="btn paypal" href="${lienPaypal}" target="_blank" rel="noopener">Payer ${euros(montant)} avec PayPal</a>
@@ -736,7 +734,7 @@ function vuePaiement(prenom, mail){
       <p style="margin:14px 0 0"><b>Ou avec Wero</b>, depuis l'appli de votre banque : envoyez ${euros(montant)} à <b>diwera.devienne@gmail.com</b>, avec la référence <b>${ref}</b> en message.
       <br><img src="wero-qr.png" alt="QR code Wero de Diwéra Devienne" style="width:260px;max-width:80%;border-radius:12px;margin-top:8px"></p>
       <p style="margin:14px 0 0">Ou par virement bancaire, avec la référence <b>${ref}</b> en libellé.
-      ${REGLAGES.rib ? `<img class="rib" src="${REGLAGES.rib}" alt="RIB de Diwéra">` : `<br><span style="color:var(--doux)">Les coordonnées bancaires vous sont envoyées par e-mail en réponse à votre commande.</span>`}</p></div>
+      ${REGLAGES.rib ? `<br><img class="rib" src="${REGLAGES.rib}" alt="RIB de Diwéra Devienne" style="background:#fff;margin-top:10px">` : `<br><span style="color:var(--doux)">Les coordonnées bancaires vous sont envoyées par e-mail en réponse à votre commande.</span>`}</p></div>
     <div class="encadre"><b>3 — Recevez votre séance</b><br>Dès le paiement reçu, votre séance arrive par e-mail, en général sous 48 h.</div>
     <div class="actions"><button class="btn" data-a="fini">Revenir à la boutique</button></div>`;
   panier = []; sauver(); afficher();

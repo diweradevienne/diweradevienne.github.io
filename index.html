@@ -116,6 +116,16 @@ header,main,section,footer,.page{position:relative;z-index:1}
 @keyframes brille-point{0%,100%{opacity:.15}50%{opacity:1}}
 @media (prefers-reduced-motion: reduce){.scintille,.point{animation:none;opacity:.7}}
 
+/* Tout le foyer */
+.foyer{margin:26px auto 0;max-width:860px;text-align:center;background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:22px 24px;position:relative;overflow:hidden}
+.foyer::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
+.foyer-titre{font-family:"Kaushan Script",cursive;font-size:clamp(24px,3vw,32px);color:var(--or);margin-bottom:6px}
+.foyer p{margin:6px 0;color:var(--doux)}
+.foyer b{color:var(--encre);font-weight:500}
+.foyer .echange{font-style:italic;font-size:15px;margin-top:12px}
+.proche{font:400 13px Jost,sans-serif;background:none;border:0;color:var(--orchidee);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px 0 0;display:block;margin-left:auto}
+.proche.ajoute{color:var(--or);text-decoration:none}
+
 /* Promesses */
 .promesses{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--trait);border-bottom:1px solid var(--trait)}
 .promesses div{padding:26px 20px;text-align:center;font-size:14px;letter-spacing:.06em;color:var(--doux)}
@@ -294,6 +304,14 @@ footer .prisme{margin:18px 0}
     <div><b>Chez vous</b>vidéo à regarder à votre rythme</div>
     <div><b>À volonté</b>chaque soin se revoit autant que souhaité</div>
     <div><b>Simple</b>paiement par PayPal ou virement</div>
+  </div>
+  <div class="foyer">
+    <div class="foyer-titre">Une séance pour tout votre foyer</div>
+    <p>Chaque personne qui vit sous le même toit, dans le même foyer, peut profiter de la séance en vidéo, sans rien payer de plus.</p>
+    <p>Pour un proche qui vit ailleurs, même de votre famille : la séance lui est proposée à <b>33 €</b> au lieu du prix plein, pour qu'il puisse en profiter lui aussi.
+      Choisissez simplement « Pour un proche · 33 € » sous la séance.</p>
+    <p class="echange">Dans un nettoyage karmique, comme dans toute séance énergétique, l'échange fait partie du chemin : toute peine mérite salaire.
+      C'est ce qui rend l'ensemble juste, pour vous comme pour moi.</p>
   </div>
 </div>
 
@@ -483,7 +501,7 @@ const euros = n => n.toLocaleString("fr-FR") + " €";
 const image = (nom, l, h) => `https://static.wixstatic.com/media/${nom}/v1/fill/w_${l},h_${h || l},al_c,q_85,enc_auto/${nom}`;
 const $ = s => document.querySelector(s);
 let panier = [];
-try { panier = JSON.parse(localStorage.getItem("panier-diwera") || "[]").filter(id => SOINS.some(s => s.id === id)); } catch(e) {}
+try { panier = JSON.parse(localStorage.getItem("panier-diwera") || "[]").filter(id => SOINS.some(s => s.id === id.split("@")[0])); } catch(e) {}
 const sauver = () => { try { localStorage.setItem("panier-diwera", JSON.stringify(panier)); } catch(e) {} };
 
 // étoiles comme le générique de début : un ciel pailleté, plus dense en haut
@@ -525,7 +543,11 @@ $("#filtres").addEventListener("click", e => {
 });
 
 // trouver mon soin
-const soinPar = id => SOINS.find(s => s.id === id);
+const soinPar = id => SOINS.find(s => s.id === id.split("@")[0]);
+const PRIX_PROCHE = 33;
+const pourProche = s => !s.vedette && s.cat !== "Programmes";
+const article = id => { const s = soinPar(id); return id.endsWith("@proche")
+  ? { titre: s.titre + " — pour un proche (autre foyer)", prix: PRIX_PROCHE } : { titre: s.titre, prix: s.prix }; };
 $("#ressentis").innerHTML = GUIDE.map((g, i) => `<button type="button" aria-pressed="false" data-g="${i}">${g.ressenti}</button>`).join("");
 $("#ressentis").addEventListener("click", e => {
   const b = e.target.closest("button[data-g]"); if (!b) return;
@@ -554,7 +576,7 @@ function vueFiche(id){
     <p style="color:var(--doux)">${s.accroche}</p>
     <h4>Ce soin est fait pour vous si</h4><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul>
     <h4>Informations pratiques</h4>
-    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}</span></div>
+    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}${pourProche(s) ? " — pour tout votre foyer ; " + euros(PRIX_PROCHE) + " pour un proche qui vit ailleurs" : " — pour tout votre foyer"}</span></div>
     <p style="color:var(--doux);font-size:14px;margin-top:18px">Ce soin accompagne votre chemin ; votre médecin reste votre premier allié.</p>
     <div class="actions"><button type="button" class="lien" data-a="fermer">Fermer</button>${bouton(s)}</div></div>`;
   if (!dlg.open) dlg.showModal();
@@ -565,12 +587,14 @@ document.addEventListener("click", e => {
 });
 
 const bouton = s => { const dans = panier.includes(s.id); return `<button class="ajouter${dans ? " ajoute" : ""}" data-id="${s.id}">${dans ? "Dans le panier ✓" : "Ajouter"}</button>`; };
+const boutonProche = s => { if (!pourProche(s)) return ""; const id = s.id + "@proche", dans = panier.includes(id);
+  return `<button class="proche${dans ? " ajoute" : ""}" data-id="${id}">${dans ? "Pour un proche ✓" : "Pour un proche · " + euros(PRIX_PROCHE)}</button>`; };
 const pourVous = s => `<details><summary>Ce soin est fait pour vous si…</summary><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul></details>`;
 const carteSoin = s => `
     <article class="soin">
       <div class="image" data-voir="${s.id}"><img loading="lazy" src="${image(s.img, 640)}" alt="${s.titre}">${s.ruban ? `<span class="ruban">${s.ruban}</span>` : ""}</div>
       <div class="cat">${s.cat}</div><h3 data-voir="${s.id}">${s.titre}</h3><p>${s.accroche}</p>${pourVous(s)}
-      <div class="bas"><span class="prix">${euros(s.prix)}</span>${bouton(s)}</div>
+      <div class="bas"><span class="prix">${euros(s.prix)}</span>${bouton(s)}</div>${boutonProche(s)}
     </article>`;
 function afficher(){
   const v = VEDETTE;
@@ -591,12 +615,12 @@ document.addEventListener("click", e => {
   const id = b.dataset.id;
   panier = panier.includes(id) ? panier.filter(x => x !== id) : [...panier, id];
   sauver(); afficher();
-  if (b.closest(".fiche")) vueFiche(id);
+  if (b.closest(".fiche")) vueFiche(id.split("@")[0]);
 });
 
 // panier
 const dlg = $("#dlg");
-const total = () => panier.reduce((t, id) => t + SOINS.find(s => s.id === id).prix, 0);
+const total = () => panier.reduce((t, id) => t + article(id).prix, 0);
 function vuePanier(){
   if (!panier.length) {
     $("#contenuDlg").innerHTML = `<h2>Mon panier</h2><p style="color:var(--doux)">Votre panier attend son premier soin.</p>
@@ -604,7 +628,7 @@ function vuePanier(){
     return;
   }
   $("#contenuDlg").innerHTML = `<h2>Mon panier</h2>
-    ${panier.map(id => { const s = SOINS.find(x => x.id === id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(s.prix)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
+    ${panier.map(id => { const s = article(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(s.prix)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
     <div class="total"><span>Total</span><span>${euros(total())}</span></div>
     <form id="formCommande">
       <label for="prenom">Votre prénom</label><input type="text" id="prenom" required autocomplete="given-name">
@@ -615,7 +639,7 @@ function vuePanier(){
 }
 function vuePaiement(prenom, mail){
   const ref = "DIW-" + Date.now().toString(36).toUpperCase().slice(-5);
-  const lignes = panier.map(id => { const s = SOINS.find(x => x.id === id); return "- " + s.titre + " (" + euros(s.prix) + ")"; }).join("\n");
+  const lignes = panier.map(id => { const s = article(id); return "- " + s.titre + " (" + euros(s.prix) + ")"; }).join("\n");
   const montant = total();
   const texte = `Bonjour Diwéra,\n\nVoici ma commande ${ref} :\n${lignes}\nTotal : ${euros(montant)}\n\nPrénom : ${prenom}\nE-mail : ${mail}\n\nJe paie par PayPal ou par virement avec la référence ${ref}.\nMerci !`;
   const mailto = REGLAGES.email ? `mailto:${REGLAGES.email}?subject=${encodeURIComponent("Commande " + ref)}&body=${encodeURIComponent(texte)}` : "";

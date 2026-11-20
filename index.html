@@ -755,7 +755,7 @@ function vuePanier(){
     return;
   }
   $("#contenuDlg").innerHTML = `<h2>Mon panier</h2>
-    ${panier.map(id => { const s = article(id), p = prixPanier(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${p !== s.prix ? `<s style="color:var(--doux)">${euros(s.prix)}</s> ` : ""}${euros(p)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
+    ${panier.map(id => { const s = article(id), p = prixPanier(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(p)}${p !== s.prix ? ` <small style="color:var(--doux)">(code ${codePromo})</small>` : ""} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
     <div class="total"><span>Total</span><span>${euros(total())}</span></div>
     <div class="code-promo" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 4px">
       <label for="code" style="margin:0">Code promo</label>

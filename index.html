@@ -404,7 +404,7 @@ footer .prisme{margin:18px 0}
     <h2 style="font-size:clamp(38px,5vw,58px);margin-top:10px">Trois gestes simples</h2>
     <div class="etapes">
       <div class="etape"><div class="num">01</div><h3>Je choisis</h3><p>J'ajoute un ou plusieurs séances à mon panier.</p></div>
-      <div class="etape"><div class="num">02</div><h3>Je commande</h3><p>Je laisse mon prénom et mon e-mail, je reçois ma référence.</p></div>
+      <div class="etape"><div class="num">02</div><h3>Je commande</h3><p>Je laisse mon prénom, mon nom et mon e-mail, je reçois ma référence.</p></div>
       <div class="etape"><div class="num">03</div><h3>Je reçois</h3><p>Je paie par PayPal ou par virement ; ma séance arrive par e-mail.</p></div>
     </div>
   </section>
@@ -436,7 +436,7 @@ footer .prisme{margin:18px 0}
              votre médecin reste votre premier allié.</p>
         </details>
         <details><summary>Données personnelles</summary>
-          <p>Votre prénom et votre e-mail servent seulement à traiter votre commande et à vous envoyer votre séance.
+          <p>Votre prénom, votre nom et votre e-mail servent seulement à traiter votre commande et à vous envoyer votre séance.
              Ils restent privés. Vous pouvez demander leur suppression à tout moment par e-mail.</p>
         </details>
       </div>
@@ -730,7 +730,7 @@ function vuePanier(){
     ${panier.map(id => { const s = article(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(s.prix)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
     <div class="total"><span>Total</span><span>${euros(total())}</span></div>
     <form id="formCommande">
-      <label for="prenom">Votre prénom</label><input type="text" id="prenom" required autocomplete="given-name">
+      <label for="prenom">Votre prénom et votre nom</label><input type="text" id="prenom" required autocomplete="name" placeholder="ex. : Marie Dupont">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
       ${panier.some(id => id.endsWith("@proche") && !panier.includes(id.split("@")[0])) ? `<label for="origine">Référence de votre commande précédente (DIW-…), si vous l'avez</label><input type="text" id="origine" autocomplete="off">` : ""}
       <input type="text" id="piege" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">

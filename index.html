@@ -338,12 +338,12 @@ footer .prisme{margin:18px 0}
   <div class="promesses">
     <div><b>Chez vous</b>vidéo à regarder à votre rythme</div>
     <div><b>À volonté</b>chaque séance se revoit autant que souhaité</div>
-    <div><b>Simple</b>paiement par PayPal ou virement</div>
+    <div><b>Simple</b>paiement par PayPal, Wero ou virement</div>
   </div>
   <div class="foyer">
     <div class="foyer-titre">Une séance pour tout votre foyer</div>
     <p>Chaque personne qui vit sous le même toit, dans le même foyer, peut profiter de la séance en vidéo, sans rien payer de plus.</p>
-    <p>Pour un proche qui vit ailleurs, même de votre famille, la séance lui est proposée à <b>33 €</b> au lieu du plein tarif, pour qu'il puisse en profiter lui aussi.
+    <p>Pour un proche qui vit ailleurs, même de votre famille : <b>si vous avez déjà cette séance pour vous</b>, elle lui est proposée à <b>33 €</b> au lieu du plein tarif, pour qu'il puisse en profiter lui aussi.
       Et si vous souhaitez la lui partager, choisissez simplement « Pour un proche · 33 € » sous la séance.</p>
     <p class="echange">Dans un nettoyage karmique, comme dans toute séance énergétique, l'échange fait partie du chemin : toute peine mérite salaire.
       C'est ce qui rend l'ensemble juste, pour vous comme pour moi.</p>
@@ -652,7 +652,7 @@ function vueFiche(id){
     <p style="color:var(--doux)">${s.accroche}</p>
     <h4>Cette séance est faite pour vous si</h4><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul>
     <h4>Informations pratiques</h4>
-    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}${pourProche(s) ? " — pour tout votre foyer ; " + euros(PRIX_PROCHE) + " pour un proche qui vit ailleurs" : " — pour tout votre foyer"}</span></div>
+    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}${pourProche(s) ? " — pour tout votre foyer ; " + euros(PRIX_PROCHE) + " pour un proche qui vit ailleurs, si vous avez déjà cette séance" : " — pour tout votre foyer"}</span></div>
     <p style="color:var(--doux);font-size:14px;margin-top:18px">Cette séance accompagne votre chemin ; votre médecin reste votre premier allié.</p>
     <div class="actions"><button type="button" class="lien" data-a="fermer">Fermer</button>${bouton(s)}</div></div>`;
   if (!dlg.open) dlg.showModal();
@@ -691,6 +691,25 @@ function afficher(){
 document.addEventListener("click", e => {
   const b = e.target.closest("button[data-id]"); if (!b) return;
   const id = b.dataset.id;
+  if (b.dataset.choix) {                       // réponse à la question du prix proche
+    const base = id.split("@")[0];
+    if (b.dataset.choix === "les-deux" && !panier.includes(base)) panier.push(base);
+    if (!panier.includes(id)) panier.push(id);
+    sauver(); afficher(); dlg.close(); return;
+  }
+  if (id.endsWith("@proche") && !panier.includes(id) && !panier.includes(id.split("@")[0])) {
+    const s = soinPar(id);
+    $("#contenuDlg").innerHTML = `<h2>Pour un proche</h2>
+      <p style="color:var(--doux)">Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont <b>déjà</b> la séance « ${s.titre} » pour elles-mêmes,
+        afin de la partager avec un proche qui vit ailleurs.</p>
+      <div class="actions" style="justify-content:flex-start">
+        <button class="btn" data-id="${id}" data-choix="deja">Je l'ai déjà pour moi</button>
+        <button class="btn clair" data-id="${id}" data-choix="les-deux">Je la prends pour moi aussi (${euros(s.prix)} + ${euros(PRIX_PROCHE)})</button>
+      </div>
+      <div class="actions"><button type="button" class="lien" data-a="fermer">Annuler</button></div>`;
+    if (!dlg.open) dlg.showModal();
+    return;
+  }
   panier = panier.includes(id) ? panier.filter(x => x !== id) : [...panier, id];
   sauver(); afficher();
   if (b.closest(".fiche")) vueFiche(id.split("@")[0]);

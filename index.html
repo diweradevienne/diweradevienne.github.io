@@ -219,6 +219,23 @@ nav.filtres button[aria-pressed="true"]{background:linear-gradient(135deg,#f6c95
 .programmes .vedette{margin-bottom:28px}
 .grille-programmes{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 
+/* Méditations offertes */
+.meditations{padding-top:110px}
+.meditations h2{font-size:clamp(38px,5vw,58px);margin:10px 0 8px}
+.meditations-intro{color:var(--doux);margin:0 0 30px;max-width:640px}
+.grille-medit{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+.medit{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--trait);border-radius:18px;overflow:hidden;transition:transform .25s}
+.medit:hover{transform:translateY(-3px)}
+.medit .vignette{position:relative;aspect-ratio:16/9;background:var(--fond2)}
+.medit .vignette img{width:100%;height:100%;object-fit:cover;display:block}
+.medit .lecture{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;
+  background:rgba(255,255,255,.9);display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.medit .lecture::after{content:"";margin-left:4px;border-left:16px solid #200174;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.medit .duree{position:absolute;right:10px;bottom:10px;background:rgba(20,10,60,.8);color:#fff;font-size:12px;border-radius:6px;padding:2px 8px}
+.medit .texte{padding:14px 16px 16px}
+.medit .gratuit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--or)}
+.medit h3{font-size:21px;line-height:1.2;margin:6px 0 0}
+
 /* Comment ça marche */
 .etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
 @media (max-width:760px){.etapes{grid-template-columns:1fr}}
@@ -277,7 +294,7 @@ footer .prisme{margin:18px 0}
   <div class="page">
     <div class="barre">
       <a class="marque script" style="font-size:clamp(26px,3.4vw,34px)" href="#">L'Atelier fait d'Étoiles</a>
-      <nav class="liens" aria-label="Menu"><a href="#soins">Les soins</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
+      <nav class="liens" aria-label="Menu"><a href="#soins">Les soins</a><a href="#meditations">Méditations offertes</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
     </div>
     <div class="ouverture-grille">
       <div>
@@ -338,6 +355,13 @@ footer .prisme{margin:18px 0}
   <div class="recherche"><input type="search" id="recherche" placeholder="Rechercher un soin : karma, confiance, protection…" aria-label="Rechercher un soin"></div>
   <p class="rien" id="rien" hidden>Pour ce mot, essayez plutôt « karma », « blessure » ou « protection »… ou écrivez-moi : je vous guide avec plaisir.</p>
   <div class="grille" id="grille"></div>
+
+  <section id="meditations" class="meditations">
+    <div class="sur-titre">Mes cadeaux</div>
+    <h2>Méditations offertes</h2>
+    <p class="meditations-intro">Des méditations gratuites, à écouter sur ma chaîne YouTube, pour prendre soin de votre énergie chaque jour.</p>
+    <div class="grille-medit" id="grilleMedit"></div>
+  </section>
 
   <section id="comment" style="padding-top:110px">
     <div class="sur-titre">Comment ça marche</div>
@@ -494,6 +518,22 @@ const GUIDE = [
   { ressenti:"Un choc reste présent", soins:["cristal","integrite","intrusion"] },
   { ressenti:"J'ai vécu une agression", soins:["ame-abus","salie","pack1","programme"] },
   { ressenti:"Je veux tout le chemin", soins:["integrale","programme"] }
+];
+
+/* MÉDITATIONS OFFERTES — vidéos publiques de sa chaîne YouTube (id YouTube, titre, durée) */
+const MEDITATIONS = [
+  { yt:"rNlLElGWXyk", titre:"Réunifier votre Ombre et votre Lumière", duree:"24 min" },
+  { yt:"W6ZMZLptFTA", titre:"Nettoyer et protéger votre maison", duree:"21 min" },
+  { yt:"58cUCcM1YVo", titre:"Nettoyage du corps astral et de la Merkabah", duree:"43 min" },
+  { yt:"qBxWBUNc7LE", titre:"Méditation de la Merkabah", duree:"24 min" },
+  { yt:"wVH6YDxie7U", titre:"Le pardon avec Ho'oponopono", duree:"20 min" },
+  { yt:"6lVxXCIjgQk", titre:"Méditation de désimplantation", duree:"25 min" },
+  { yt:"L3pUy4TRdBw", titre:"Ancrage de base", duree:"16 min" },
+  { yt:"II1aoZA2AmA", titre:"Méditation d'ancrage", duree:"11 min" },
+  { yt:"b57Bjh51BBU", titre:"Pour les ancrages très difficiles", duree:"20 min" },
+  { yt:"CpGdOUvZxFo", titre:"Reconnexion à soi", duree:"18 min" },
+  { yt:"1rYI3oMot80", titre:"Reconnexion à soi par l'harmonisation des chakras", duree:"12 min" },
+  { yt:"beFCrXjbfYM", titre:"Décret de connexion aux corps de lumière", duree:"19 min" }
 ];
 
 /* ============================================================ */
@@ -677,6 +717,11 @@ const m = REGLAGES;
 $("#mentions").innerHTML = `Éditrice : ${m.nomLegal || "Diwéra Devienne (nom légal à compléter)"} — SIRET : ${m.siret || "à compléter"}<br>
   Contact : ${m.email || "à compléter"}<br>Hébergement : ${m.hebergeur || "indiqué dès la mise en ligne de la boutique"}`;
 $("#annee").textContent = new Date().getFullYear();
+$("#grilleMedit").innerHTML = MEDITATIONS.map(m => `
+  <a class="medit" href="https://www.youtube.com/watch?v=${m.yt}" target="_blank" rel="noopener">
+    <div class="vignette"><img loading="lazy" src="https://i.ytimg.com/vi/${m.yt}/hqdefault.jpg" alt=""><span class="lecture"></span><span class="duree">${m.duree}</span></div>
+    <div class="texte"><div class="gratuit">Offerte</div><h3>${m.titre}</h3></div>
+  </a>`).join("");
 afficher();
 </script>
 </body>

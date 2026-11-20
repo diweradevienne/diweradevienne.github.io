@@ -28,6 +28,15 @@ const REGLAGES = {
   hebergeur: "GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis", // hébergeur
   site: "https://latelierfaitdetoiles.wixsite.com/monsite"
 };
+
+/* CODES PROMO — à taper dans le panier (majuscules ou minuscules, peu importe)
+   remise: 20      → 20 % de moins        ou   moins: 160 → 160 € de moins par séance concernée
+   seances: "toutes" ou une liste d'identifiants, ex. ["integrale"]
+   du / au : dates de début et de fin (incluses), facultatives
+   actif: false    → code arrêté (il suffit de mettre true pour le lancer)                    */
+const CODES_PROMO = {
+  BLACKFRIDAY: { remise: 20, seances: ["integrale"], actif: false }
+};
 </script>
 <style>
 /* Lumière du matin : ivoire chaud, or, encre indigo (de son site), touche orchidée, reflet arc-en-ciel discret */
@@ -457,7 +466,7 @@ footer .prisme{margin:18px 0}
    img = nom de l'image sur son Wix (static.wixstatic.com/media/...)
    ============================================================ */
 const SOINS = [
-  { id:"integrale", cat:"Programmes", vedette:true, titre:"L'intégrale des séances de Diwéra", prix:630, prixAvant:675, promo:"Black Friday",
+  { id:"integrale", cat:"Programmes", vedette:true, titre:"L'intégrale des séances de Diwéra", prix:790,
     img:"8c1cfb_41eb28c23fd34079b702b7ec4379c446~mv2.jpg",
     accroche:"Toutes mes séances réunies : blessures de l'âme, mémoires karmiques et familiales, karma amoureux, libération des blocages. Un chemin complet, à suivre à votre rythme, tranquillement chez vous.",
     pourVous:["Vous aimez avancer en profondeur, étape par étape","Vous souhaitez un accompagnement complet, à revoir quand vous en ressentez l'appel"] },
@@ -723,7 +732,22 @@ document.addEventListener("click", e => {
 
 // panier
 const dlg = $("#dlg");
-const total = () => panier.reduce((t, id) => t + article(id).prix, 0);
+let codePromo = "", messageCode = "";
+const aujourdhui = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
+function codeValide(nom){
+  const c = CODES_PROMO[nom]; if (!c || c.actif === false) return null;
+  const j = aujourdhui(); if ((c.du && j < c.du) || (c.au && j > c.au)) return null;
+  return c;
+}
+const concerne = (c, id) => c && (c.seances === "toutes" || (c.seances || []).includes(id.split("@")[0]));
+function prixPanier(id){
+  const p = article(id).prix, c = codeValide(codePromo);
+  if (!concerne(c, id)) return p;
+  const n = c.moins ? p - c.moins : p * (100 - (c.remise || 0)) / 100;
+  return Math.max(0, Math.round(n * 100) / 100);
+}
+const titrePanier = id => article(id).titre + (prixPanier(id) !== article(id).prix ? " (code " + codePromo + ")" : "");
+const total = () => Math.round(panier.reduce((t, id) => t + prixPanier(id), 0) * 100) / 100;
 function vuePanier(){
   if (!panier.length) {
     $("#contenuDlg").innerHTML = `<h2>Mon panier</h2><p style="color:var(--doux)">Votre panier attend sa première séance.</p>
@@ -731,8 +755,14 @@ function vuePanier(){
     return;
   }
   $("#contenuDlg").innerHTML = `<h2>Mon panier</h2>
-    ${panier.map(id => { const s = article(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(s.prix)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
+    ${panier.map(id => { const s = article(id), p = prixPanier(id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${p !== s.prix ? `<s style="color:var(--doux)">${euros(s.prix)}</s> ` : ""}${euros(p)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
     <div class="total"><span>Total</span><span>${euros(total())}</span></div>
+    <div class="code-promo" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 4px">
+      <label for="code" style="margin:0">Code promo</label>
+      <input type="text" id="code" value="${codePromo}" autocomplete="off" style="flex:1;min-width:120px;text-transform:uppercase">
+      <button type="button" class="btn clair" data-a="code" style="padding:8px 16px">Appliquer</button>
+    </div>
+    ${messageCode ? `<p style="margin:0 0 8px;color:var(--doux)">${messageCode}</p>` : ""}
     <form id="formCommande">
       <label for="prenom">Votre prénom et votre nom</label><input type="text" id="prenom" required autocomplete="name" placeholder="ex. : Marie Dupont">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
@@ -744,7 +774,7 @@ function vuePanier(){
 }
 function vuePaiement(prenom, mail, extra = {}){
   const ref = "DIW-" + Date.now().toString(36).toUpperCase().slice(-5);
-  const lignes = panier.map(id => { const s = article(id); return "- " + s.titre + " (" + euros(s.prix) + ")"; }).join("\n");
+  const lignes = panier.map(id => "- " + titrePanier(id) + " (" + euros(prixPanier(id)) + ")").join("\n");
   const montant = total();
   const texte = `Bonjour Diwéra,\n\nVoici ma commande ${ref} :\n${lignes}\nTotal : ${euros(montant)}\n\nPrénom : ${prenom}\nE-mail : ${mail}\n\nJe paie par PayPal ou par virement avec la référence ${ref}.\nMerci !`;
   const mailto = REGLAGES.email ? `mailto:${REGLAGES.email}?subject=${encodeURIComponent("Commande " + ref)}&body=${encodeURIComponent(texte)}` : "";
@@ -766,7 +796,7 @@ function vuePaiement(prenom, mail, extra = {}){
     <div class="actions"><button class="btn" data-a="fini">Revenir à la boutique</button></div>`;
   if (REGLAGES.commande) {
     const donnees = { ref, prenom, mail, piege: extra.piege || "",
-      lignes: panier.map(id => ({ id: id.split("@")[0], titre: article(id).titre, prix: article(id).prix,
+      lignes: panier.map(id => ({ id: id.split("@")[0], titre: titrePanier(id), prix: prixPanier(id),
         proche: id.endsWith("@proche"), origine: extra.origine || "" })) };
     const secours = `<b>1 — Votre commande</b><br><span style="color:var(--doux)">L'envoi automatique n'a pas abouti. Envoyez-la en un clic :</span><br>
       <a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>`;
@@ -777,7 +807,7 @@ function vuePaiement(prenom, mail, extra = {}){
         : secours; })
       .catch(() => { $("#etatEnvoi").innerHTML = secours; });
   }
-  panier = []; sauver(); afficher();
+  panier = []; codePromo = ""; messageCode = ""; sauver(); afficher();
 }
 $("#ouvrirPanier").addEventListener("click", () => { vuePanier(); dlg.showModal(); });
 dlg.addEventListener("click", e => {
@@ -785,9 +815,22 @@ dlg.addEventListener("click", e => {
   const r = e.target.closest("[data-retirer]");
   if (r) { panier = panier.filter(x => x !== r.dataset.retirer); sauver(); afficher(); vuePanier(); return; }
   const a = e.target.closest("[data-a]"); if (!a) return;
+  if (a.dataset.a === "code") return appliquerCode();
   if (a.dataset.a === "fermer" || a.dataset.a === "fini") dlg.close();
   if (a.dataset.a === "copier") { const t = dlg.querySelector("textarea"); t.select(); try { navigator.clipboard.writeText(t.value); a.textContent = "Copié ✓"; } catch(e) {} }
 });
+function appliquerCode(){
+  const nom = ($("#code").value || "").trim().toUpperCase().replace(/\s+/g, "");
+  const garde = { prenom: ($("#prenom") || {}).value || "", mail: ($("#mail") || {}).value || "" };
+  const c = codeValide(nom);
+  if (!nom) { codePromo = ""; messageCode = ""; }
+  else if (!c) { codePromo = ""; messageCode = "Ce code n'est pas valable en ce moment."; }
+  else if (!panier.some(id => concerne(c, id))) { codePromo = ""; messageCode = "Ce code ne concerne aucune séance de votre panier."; }
+  else { codePromo = nom; messageCode = "Code " + nom + " appliqué ✓"; }
+  vuePanier();
+  if ($("#prenom")) $("#prenom").value = garde.prenom; if ($("#mail")) $("#mail").value = garde.mail;
+}
+dlg.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "code") { e.preventDefault(); appliquerCode(); } });
 dlg.addEventListener("submit", e => { e.preventDefault(); vuePaiement($("#prenom").value.trim(), $("#mail").value.trim(),
   { origine: ($("#origine") || {}).value || "", piege: ($("#piege") || {}).value || "" }); });
 

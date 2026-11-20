@@ -413,7 +413,8 @@ footer .prisme{margin:18px 0}
     <h3 class="abus-titre">Les programmes complets</h3>
     <div class="grille" id="grilleAbusProg"></div>
     <h3 class="abus-titre">Les séances à l'unité</h3>
-    <div class="grille" id="grilleAbus"></div>
+    <p style="color:var(--doux);max-width:760px;margin:0 0 14px">Vous pouvez aussi choisir une seule séance à la fois, selon ce qui résonne en vous. Toutes les séances à l'unité se trouvent plus haut dans « Toutes les séances ». Les plus demandées pour ce chemin :</p>
+    <ul id="listeAbus" style="columns:2 260px;max-width:760px;padding-left:20px;color:var(--doux)"></ul>
   </section>
 
   <section id="autres-services" style="padding-top:60px">
@@ -602,7 +603,7 @@ const GUIDE = [
   { ressenti:"J'ai été trahie, blessée", soins:["trahison","injustice","humiliation"] },
   { ressenti:"Un choc reste présent", soins:["cristal","integrite","intrusion"] },
   { ressenti:"Si vous avez vécu un abus sexuel", abus:true, soins:["pack1","programme2","programme"] },
-  { ressenti:"Je souhaite retrouver ma souveraineté", soins:["confiance","illegitimite","devalorisation","ego","envoutement","emprises","transgen"] },
+  { ressenti:"Je souhaite retrouver ma souveraineté", soins:["confiance","illegitimite","devalorisation","integrite","ego","envoutement","emprises","transgen"] },
   { ressenti:"Je veux tout le chemin", soins:["integrale","programme"] }
 ];
 
@@ -745,7 +746,7 @@ function afficher(){
   $("#rien").hidden = liste.length > 0;
   $("#grille").innerHTML = liste.map(carteSoin).join("");
   $("#grilleAbusProg").innerHTML = ABUS_PROG.map(soinPar).filter(Boolean).map(carteSoin).join("");
-  $("#grilleAbus").innerHTML = ABUS.map(soinPar).filter(Boolean).map(carteSoin).join("");
+  $("#listeAbus").innerHTML = ABUS.map(soinPar).filter(Boolean).map(s => `<li style="margin:4px 0;break-inside:avoid"><button type="button" class="lien" data-voir="${s.id}" style="text-align:left;color:var(--doux);font-size:15.5px">${s.titre}</button></li>`).join("");
   $("#nbPanier").textContent = panier.length;
 }
 document.addEventListener("click", e => {

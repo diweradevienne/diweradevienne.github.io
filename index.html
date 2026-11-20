@@ -661,7 +661,8 @@ $("#ressentis").addEventListener("click", e => {
     : `<p>Avec douceur, voici les séances que je vous propose. Écoutez ce qui résonne en vous : c'est votre ressenti qui choisit.</p>`;
   c.innerHTML = `${encart}
     <div class="mini">${g.soins.map(soinPar).filter(Boolean).map(s => `<button type="button" data-voir="${s.id}"><img src="${image(s.img, 160)}" alt=""><span>${s.titre}<small>${euros(s.prix)}</small></span></button>`).join("")}</div>
-    ${g.abus ? `<p style="text-align:center;margin-top:14px"><a class="btn clair" href="#abus">Voir l'espace dédié et toutes ses séances</a></p>` : ""}`;
+    ${g.abus ? `<p class="abus-aide" style="margin:18px 0 0">Vous préférez avancer une étape à la fois ? Chaque séance de ces programmes existe aussi à l'unité : vous pouvez choisir seulement celle qui résonne en vous, puis revenir quand vous en ressentez l'appel.</p>
+    <p style="text-align:center;margin-top:14px"><a class="btn clair" href="#abus">Voir les séances à l'unité</a></p>` : ""}`;
   c.hidden = false;
 });
 

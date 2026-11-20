@@ -265,6 +265,7 @@ nav.filtres button[aria-pressed="true"]{background:linear-gradient(135deg,#f6c95
 .abus-aide b{color:var(--encre);font-weight:500}
 .abus-titre{font-size:28px;margin:10px 0 18px}
 .abus .grille{margin-bottom:40px}
+.encart-abus .abus-aide{margin-bottom:14px}
 
 /* Comment ça marche */
 .etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
@@ -571,7 +572,7 @@ const GUIDE = [
   { ressenti:"Les mêmes schémas se répètent", soins:["transgen","karma","egypte"] },
   { ressenti:"J'ai été trahie, blessée", soins:["trahison","injustice","humiliation"] },
   { ressenti:"Un choc reste présent", soins:["cristal","integrite","intrusion"] },
-  { ressenti:"J'ai vécu une agression", soins:["ame-abus","salie","pack1","programme"] },
+  { ressenti:"Si vous avez vécu un abus sexuel", abus:true, soins:["pack1","programme2","programme"] },
   { ressenti:"Je veux tout le chemin", soins:["integrale","programme"] }
 ];
 
@@ -656,8 +657,11 @@ $("#ressentis").addEventListener("click", e => {
   if (deja) { c.hidden = true; return; }
   b.setAttribute("aria-pressed", "true");
   const g = GUIDE[+b.dataset.g];
-  c.innerHTML = `<p>Avec douceur, voici les séances que je vous propose. Écoutez ce qui résonne en vous : c'est votre ressenti qui choisit.</p>
-    <div class="mini">${g.soins.map(soinPar).filter(Boolean).map(s => `<button type="button" data-voir="${s.id}"><img src="${image(s.img, 160)}" alt=""><span>${s.titre}<small>${euros(s.prix)}</small></span></button>`).join("")}</div>`;
+  const encart = g.abus ? `<div class="encart-abus">${[...document.querySelectorAll("#abus .abus-intro, #abus .abus-aide")].map(x => x.outerHTML).join("")}</div><h3 class="abus-titre">Les programmes spécialisés</h3>`
+    : `<p>Avec douceur, voici les séances que je vous propose. Écoutez ce qui résonne en vous : c'est votre ressenti qui choisit.</p>`;
+  c.innerHTML = `${encart}
+    <div class="mini">${g.soins.map(soinPar).filter(Boolean).map(s => `<button type="button" data-voir="${s.id}"><img src="${image(s.img, 160)}" alt=""><span>${s.titre}<small>${euros(s.prix)}</small></span></button>`).join("")}</div>
+    ${g.abus ? `<p style="text-align:center;margin-top:14px"><a class="btn clair" href="#abus">Voir l'espace dédié et toutes ses séances</a></p>` : ""}`;
   c.hidden = false;
 });
 

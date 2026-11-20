@@ -21,7 +21,8 @@
 const REGLAGES = {
   email: "diwera.devienne@gmail.com", // adresse où arrivent les commandes
   paypal: "https://paypal.me/diweradevienne", // son lien PayPal (trouvé sur sa page Paiement du Wix) — paiement à privilégier
-  rib: "rib.png",       // RIB affiché après la commande (adresse personnelle cachée), décision de Diwéra du 20/11/2026
+  commande: "https://script.google.com/macros/s/AKfycbwsj7LEI_cnTlLgFFY6jWx990dqv2jbt_R24Q22y646fr0Sijl8nTLEqBzwBqO8vNU_dw/exec", // outil « Commandes de ma boutique » (Gmail de Diwéra), 20/11/2026
+  rib: "rib.png",      // RIB affiché après la commande (adresse personnelle cachée), décision de Diwéra du 20/11/2026
   nomLegal: "Diwéra Devienne", // prénom et nom (confirmés par elle le 20/11)
   siret: "837 678 853 00032", // numéro SIRET (trouvé sur son site Wix)
   hebergeur: "GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis", // hébergeur
@@ -731,11 +732,13 @@ function vuePanier(){
     <form id="formCommande">
       <label for="prenom">Votre prénom</label><input type="text" id="prenom" required autocomplete="given-name">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
+      ${panier.some(id => id.endsWith("@proche") && !panier.includes(id.split("@")[0])) ? `<label for="origine">Référence de votre commande précédente (DIW-…), si vous l'avez</label><input type="text" id="origine" autocomplete="off">` : ""}
+      <input type="text" id="piege" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
       <label class="case"><input type="checkbox" required> J'accepte les conditions de vente et je souhaite recevoir ma séance dès le paiement reçu ; je renonce ainsi au délai de rétractation de 14 jours.</label>
       <div class="actions"><button type="button" class="lien" data-a="fermer">Continuer mes achats</button><button class="btn" type="submit">Je commande</button></div>
     </form>`;
 }
-function vuePaiement(prenom, mail){
+function vuePaiement(prenom, mail, extra = {}){
   const ref = "DIW-" + Date.now().toString(36).toUpperCase().slice(-5);
   const lignes = panier.map(id => { const s = article(id); return "- " + s.titre + " (" + euros(s.prix) + ")"; }).join("\n");
   const montant = total();
@@ -744,9 +747,9 @@ function vuePaiement(prenom, mail){
   const lienPaypal = REGLAGES.paypal ? REGLAGES.paypal.replace(/\/+$/, "") + "/" + montant + "EUR" : "";
   $("#contenuDlg").innerHTML = `<h2>Merci ${prenom}</h2>
     <div class="sur-titre">Votre référence</div><p class="ref">${ref}</p>
-    <div class="encadre"><b>1 — Envoyez votre commande</b><br>
-      <a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>
-      <br><small style="color:var(--doux)">Un e-mail tout prêt s'ouvre : il suffit de l'envoyer.</small></div>
+    <div class="encadre" id="etatEnvoi"><b>1 — Votre commande</b><br>
+      ${REGLAGES.commande ? `<span style="color:var(--doux)">Envoi de votre commande en cours…</span>` : `<a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>
+      <br><small style="color:var(--doux)">Un e-mail tout prêt s'ouvre : il suffit de l'envoyer.</small>`}</div>
     <div class="encadre"><b>2 — Payez ${euros(montant)}</b><br>
       De préférence par PayPal, le plus rapide :<br>
       ${lienPaypal ? `<a class="btn paypal" href="${lienPaypal}" target="_blank" rel="noopener">Payer ${euros(montant)} avec PayPal</a>
@@ -757,6 +760,19 @@ function vuePaiement(prenom, mail){
       ${REGLAGES.rib ? `<br><img class="rib" src="${REGLAGES.rib}" alt="RIB de Diwéra Devienne" style="background:#fff;margin-top:10px">` : `<br><span style="color:var(--doux)">Les coordonnées bancaires vous sont envoyées par e-mail en réponse à votre commande.</span>`}</p></div>
     <div class="encadre"><b>3 — Recevez votre séance</b><br>Dès le paiement reçu, votre séance arrive par e-mail, en général sous 48 h.</div>
     <div class="actions"><button class="btn" data-a="fini">Revenir à la boutique</button></div>`;
+  if (REGLAGES.commande) {
+    const donnees = { ref, prenom, mail, piege: extra.piege || "",
+      lignes: panier.map(id => ({ id: id.split("@")[0], titre: article(id).titre, prix: article(id).prix,
+        proche: id.endsWith("@proche"), origine: extra.origine || "" })) };
+    const secours = `<b>1 — Votre commande</b><br><span style="color:var(--doux)">L'envoi automatique n'a pas abouti. Envoyez-la en un clic :</span><br>
+      <a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>`;
+    fetch(REGLAGES.commande, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(donnees) })
+      .then(r => r.json())
+      .then(r => { $("#etatEnvoi").innerHTML = r.ok
+        ? `<b>1 — Commande reçue ✓</b><br>Un e-mail de confirmation vient de partir vers <b>${mail.replace(/</g, "&lt;")}</b> (pensez à regarder dans les indésirables).`
+        : secours; })
+      .catch(() => { $("#etatEnvoi").innerHTML = secours; });
+  }
   panier = []; sauver(); afficher();
 }
 $("#ouvrirPanier").addEventListener("click", () => { vuePanier(); dlg.showModal(); });
@@ -768,7 +784,8 @@ dlg.addEventListener("click", e => {
   if (a.dataset.a === "fermer" || a.dataset.a === "fini") dlg.close();
   if (a.dataset.a === "copier") { const t = dlg.querySelector("textarea"); t.select(); try { navigator.clipboard.writeText(t.value); a.textContent = "Copié ✓"; } catch(e) {} }
 });
-dlg.addEventListener("submit", e => { e.preventDefault(); vuePaiement($("#prenom").value.trim(), $("#mail").value.trim()); });
+dlg.addEventListener("submit", e => { e.preventDefault(); vuePaiement($("#prenom").value.trim(), $("#mail").value.trim(),
+  { origine: ($("#origine") || {}).value || "", piege: ($("#piege") || {}).value || "" }); });
 
 // mentions
 const m = REGLAGES;

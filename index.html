@@ -704,8 +704,8 @@ document.addEventListener("click", e => {
       <p style="color:var(--doux)">Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont <b>déjà</b> la séance « ${s.titre} » pour elles-mêmes,
         afin de la partager avec un proche qui vit ailleurs.</p>
       <div class="actions" style="justify-content:flex-start">
-        <button class="btn" data-id="${id}" data-choix="deja">Je l'ai déjà pour moi</button>
-        <button class="btn clair" data-id="${id}" data-choix="les-deux">Je la prends pour moi aussi (${euros(s.prix)} + ${euros(PRIX_PROCHE)})</button>
+        <button class="btn" data-id="${id}" data-choix="deja">Je l'ai déjà pour moi, je l'offre à un proche (${euros(PRIX_PROCHE)})</button>
+        <button class="btn clair" data-id="${id}" data-choix="les-deux">Je la prends pour moi et je l'offre à un proche (${euros(s.prix)} + ${euros(PRIX_PROCHE)})</button>
       </div>
       <div class="actions"><button type="button" class="lien" data-a="fermer">Annuler</button></div>`;
     if (!dlg.open) dlg.showModal();

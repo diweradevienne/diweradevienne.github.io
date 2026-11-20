@@ -733,6 +733,8 @@ function vuePaiement(prenom, mail){
       De préférence par PayPal, le plus rapide :<br>
       ${lienPaypal ? `<a class="btn paypal" href="${lienPaypal}" target="_blank" rel="noopener">Payer ${euros(montant)} avec PayPal</a>
       <br><small style="color:var(--doux)">Dans le message PayPal, notez votre référence <b>${ref}</b>.</small>` : `<div class="attention">Lien PayPal à compléter dans les réglages.</div>`}
+      <p style="margin:14px 0 0"><b>Ou avec Wero</b>, depuis l'appli de votre banque : envoyez ${euros(montant)} à <b>diwera.devienne@gmail.com</b>, avec la référence <b>${ref}</b> en message.
+      <br><img src="wero-qr.png" alt="QR code Wero de Diwéra Devienne" style="width:260px;max-width:80%;border-radius:12px;margin-top:8px"></p>
       <p style="margin:14px 0 0">Ou par virement bancaire, avec la référence <b>${ref}</b> en libellé.
       ${REGLAGES.rib ? `<img class="rib" src="${REGLAGES.rib}" alt="RIB de Diwéra">` : `<br><span style="color:var(--doux)">Les coordonnées bancaires vous sont envoyées par e-mail en réponse à votre commande.</span>`}</p></div>
     <div class="encadre"><b>3 — Recevez votre séance</b><br>Dès le paiement reçu, votre séance arrive par e-mail, en général sous 48 h.</div>

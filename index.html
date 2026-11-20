@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les soins de Diwéra</title>
+<meta name="description" content="Soins énergétiques en vidéo par Diwéra Devienne, enseignante et guérisseuse — L'Atelier fait d'Étoiles. À regarder chez vous, autant de fois que vous le souhaitez.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+/* ============================================================
+   RÉGLAGES DE LA BOUTIQUE — la seule partie à compléter
+   (les soins sont plus bas, dans « SOINS »)
+   ============================================================ */
+const REGLAGES = {
+  email: "diwera.devienne@gmail.com", // adresse où arrivent les commandes
+  paypal: "https://paypal.me/diweradevienne", // son lien PayPal (trouvé sur sa page Paiement du Wix) — paiement à privilégier
+  rib: "",              // nom d'un fichier image du RIB posé à côté de cette page, ex. "rib.jpg" (à compléter)
+  nomLegal: "Diwéra Devienne", // prénom et nom (confirmés par elle le 20/11)
+  siret: "837 678 853 00032", // numéro SIRET (trouvé sur son site Wix)
+  hebergeur: "GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis", // hébergeur
+  site: "https://latelierfaitdetoiles.wixsite.com/monsite"
+};
+</script>
+<style>
+/* Lumière du matin : ivoire chaud, or, encre indigo (de son site), touche orchidée, reflet arc-en-ciel discret */
+/* Nuit bleu marine de son site (indigo #200174), soleil doré, étoiles d'or, arc-en-ciel */
+:root{
+  --fond:#200174; --fond2:#2b0d8a; --surface:#2a0c86; --encre:#fff8ec; --doux:#d9cff2; --trait:rgba(202,180,231,.28);
+  --or:#f2c96b; --or-clair:#7a6230; --orchidee:#fb68ff; --nuit:#170055;
+  --prisme:linear-gradient(90deg,#f0a7a0,#f3c98b,#e9e19a,#a9d8b8,#9cc7ea,#b8a6e6,#e6a8d6);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(760px 760px at 50% -240px,rgba(255,214,120,.45) 0%,rgba(251,104,255,.14) 38%,rgba(32,1,116,0) 70%) fixed,var(--fond);color:var(--encre);font:300 17px/1.7 Jost,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Cormorant,Georgia,serif;font-weight:500;margin:0;line-height:1.05;letter-spacing:-.01em}
+a{color:inherit}
+.page{max-width:1160px;margin:0 auto;padding:0 16px}
+.sur-titre{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--or);font-weight:400}
+
+/* Barre du haut */
+.barre{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 0 6px;text-align:center}
+.marque{font-family:Cormorant,serif;font-size:24px;font-weight:500;letter-spacing:.02em;text-decoration:none}
+.marque span{font-style:italic;color:var(--or)}
+.liens{display:flex;gap:26px;font-size:14px;letter-spacing:.06em}
+.liens a{text-decoration:none;color:var(--doux)}
+.liens a:hover{color:var(--encre)}
+@media (max-width:640px){.liens{display:none}}
+
+/* Ouverture : le soleil */
+.ouverture{position:relative;overflow:hidden;--encre:#200174;--doux:#2c1c78;--or:#200174;color:var(--encre);
+  background:radial-gradient(ellipse at 18% 8%,rgba(255,255,255,.5),transparent 45%),radial-gradient(ellipse at 88% 22%,rgba(255,240,200,.45),transparent 40%),
+  linear-gradient(180deg,#4f97d6 0%,#7fbbe8 50%,#a7d5f4 100%)}
+.ouverture::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#8d7be0,#6c58c9 40%,#8d7be0)}
+.script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff;letter-spacing:0}
+.ouverture .sur-titre{color:#fff;text-shadow:0 1px 6px rgba(32,1,116,.45)}
+.ouverture .intro{color:#1d1160!important}
+.ouverture .phrase{color:#fff;text-shadow:0 1px 10px rgba(32,1,116,.5)}
+.ouverture .phrase em{color:#fff3c4}
+.ouverture .liens a{color:#200174}
+.ouverture .etiquette-arche{background:rgba(255,255,255,.95);border-color:rgba(255,255,255,.8)}
+.ouverture .btn.clair{border-color:#200174;color:#200174}
+.ouverture::before{content:"";position:absolute;top:-260px;right:-160px;left:auto;transform:none;width:760px;height:760px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,250,215,.95) 0%,rgba(255,232,160,.5) 26%,rgba(255,255,255,0) 62%)}
+.ouverture-grille{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:40px 0 80px}
+@media (max-width:860px){.ouverture-grille{grid-template-columns:1fr;gap:40px;padding-bottom:56px}}
+.ouverture h1{font-size:clamp(52px,7.6vw,96px);margin:18px 0 18px}
+.arc{background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+.phrase{font-family:Cormorant,serif;font-size:clamp(26px,3.4vw,38px);line-height:1.2;margin:-6px 0 22px}
+.phrase em{font-style:italic;color:var(--or)}
+.ouverture p.intro{font-size:18px;color:var(--doux);max-width:500px;margin:0 0 32px}
+.prisme{height:2px;width:120px;background:var(--prisme);border-radius:2px;margin-top:6px}
+.boutons{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{font:500 15px/1 Jost,sans-serif;letter-spacing:.06em;border:0;background:linear-gradient(135deg,#f6c95c,#fb68ff);color:#2a1a4a;box-shadow:0 10px 24px -8px rgba(233,139,169,.6);
+  border-radius:99px;padding:16px 28px;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.clair{background:transparent;color:var(--encre);border:1px solid var(--encre);box-shadow:none}
+.arche{position:relative;justify-self:center;width:min(470px,100%);aspect-ratio:1/1;border-radius:24px;overflow:hidden;
+  box-shadow:0 40px 90px -30px rgba(255,200,120,.35)}
+.arche img{width:100%;height:100%;object-fit:cover;display:block}
+.arche::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:var(--prisme);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
+.etiquette-arche{position:absolute;left:-14px;bottom:-18px;background:var(--surface);border:1px solid var(--trait);border-radius:16px;
+  padding:14px 18px;box-shadow:0 20px 40px -20px rgba(40,20,80,.35);max-width:240px}
+.etiquette-arche b{font-family:Cormorant,serif;font-size:22px;font-weight:500;display:block;line-height:1.1}
+.etiquette-arche small{color:var(--doux);font-size:13px}
+@media (max-width:860px){.etiquette-arche{left:10px}}
+#paillettes{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+header,main,section,footer,.page{position:relative;z-index:1}
+.panier-bouton{z-index:5!important}
+.paillette{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--or);box-shadow:0 0 10px 3px rgba(233,193,101,.75);
+  opacity:0;animation:luit 6s ease-in-out infinite;pointer-events:none}
+.paillette.blanche{background:#fff;box-shadow:0 0 10px 3px rgba(255,255,255,.7)}
+@keyframes luit{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.95;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.paillette{animation:none;opacity:.4}}
+
+.protection{font-size:13.5px;line-height:1.55;font-style:italic;color:#24156e;max-width:520px;margin:-14px 0 28px;
+  padding:10px 14px;border-left:3px solid #fff;background:rgba(255,255,255,.35);border-radius:0 10px 10px 0}
+.arc-ciel{position:absolute;right:-180px;top:40px;width:900px;height:900px;border-radius:50%;pointer-events:none;opacity:.55;
+  background:radial-gradient(circle,transparent 50%,rgba(232,96,111,.7) 51%,rgba(242,160,61,.7) 53%,rgba(230,195,55,.7) 55%,rgba(95,191,122,.65) 57%,rgba(78,163,221,.65) 59%,rgba(138,111,214,.65) 61%,transparent 62.5%);
+  -webkit-mask:linear-gradient(180deg,#000 0%,#000 45%,transparent 70%);mask:linear-gradient(180deg,#000 0%,#000 45%,transparent 70%);filter:blur(1.5px)}
+@media (max-width:860px){.arc-ciel{right:-420px;top:120px}}
+.scintilles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+/* Étoiles comme le générique de début : croix fines dorées et blanches, un ciel pailleté */
+.scintille{position:absolute;opacity:0;animation:brille 3s ease-in-out infinite;transform:translate(-50%,-50%)}
+.scintille::before,.scintille::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%}
+.scintille::before{width:100%;height:9%;background:linear-gradient(90deg,transparent,rgba(255,240,170,.95) 40%,#fff 50%,rgba(255,240,170,.95) 60%,transparent)}
+.scintille::after{width:9%;height:100%;background:linear-gradient(180deg,transparent,rgba(255,240,170,.95) 40%,#fff 50%,rgba(255,240,170,.95) 60%,transparent)}
+.scintille i{position:absolute;left:50%;top:50%;width:22%;height:22%;transform:translate(-50%,-50%);border-radius:50%;background:#fffbe6;
+  box-shadow:0 0 6px 2px rgba(255,226,120,.95),0 0 14px 4px rgba(255,214,90,.45)}
+.scintille.blanche::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 45%,#fff 50%,rgba(255,255,255,.95) 55%,transparent)}
+.scintille.blanche::after{background:linear-gradient(180deg,transparent,rgba(255,255,255,.95) 45%,#fff 50%,rgba(255,255,255,.95) 55%,transparent)}
+.scintille.blanche i{background:#fff;box-shadow:0 0 6px 2px rgba(255,255,255,.95)}
+.point{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff7d0;box-shadow:0 0 4px 1px rgba(255,230,140,.9);opacity:0;animation:brille-point 2.6s ease-in-out infinite}
+@keyframes brille{0%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}40%{opacity:1;transform:translate(-50%,-50%) scale(1)}60%{opacity:.85;transform:translate(-50%,-50%) scale(.75)}}
+@keyframes brille-point{0%,100%{opacity:.15}50%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.scintille,.point{animation:none;opacity:.7}}
+
+/* Promesses */
+.promesses{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--trait);border-bottom:1px solid var(--trait)}
+.promesses div{padding:26px 20px;text-align:center;font-size:14px;letter-spacing:.06em;color:var(--doux)}
+.promesses div+div{border-left:1px solid var(--trait)}
+.promesses b{display:block;font-family:Cormorant,serif;font-weight:500;font-size:22px;letter-spacing:0;color:var(--encre)}
+@media (max-width:640px){.promesses{grid-template-columns:1fr}.promesses div+div{border-left:0;border-top:1px solid var(--trait)}}
+
+/* Soins */
+.section{padding:84px 0 40px}
+.entete-section{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px}
+.entete-section h2{font-size:clamp(38px,5vw,58px);margin-top:10px}
+nav.filtres{display:flex;gap:6px;flex-wrap:wrap}
+nav.filtres button{font:400 14px Jost,sans-serif;letter-spacing:.04em;border:1px solid var(--trait);background:transparent;color:var(--doux);
+  border-radius:99px;padding:9px 16px;cursor:pointer;transition:all .2s}
+nav.filtres button:hover{border-color:var(--encre);color:var(--encre)}
+nav.filtres button[aria-pressed="true"]{background:linear-gradient(135deg,#f6c95c,#fb68ff);border-color:transparent;color:#2a1a4a;font-weight:500}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:44px 28px}
+.soin{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:14px 14px 18px;position:relative;overflow:hidden;
+  box-shadow:0 18px 40px -20px rgba(0,0,0,.55)}
+.soin::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8);opacity:.8;z-index:1}
+.soin > :not(.image){padding-left:6px;padding-right:6px}
+.soin .image{position:relative;aspect-ratio:1/1;border-radius:18px;overflow:hidden;background:var(--fond2);margin-bottom:18px}
+.soin .image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.soin:hover .image img{transform:scale(1.035)}
+.ruban{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);color:#1d1446;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  border-radius:99px;padding:5px 12px}
+.soin .cat{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--or)}
+.soin h3{font-size:25px;line-height:1.15;margin:8px 0 10px}
+.soin p{margin:0 0 12px;color:var(--doux);font-size:15.5px;line-height:1.6}
+.soin details{font-size:15px;color:var(--doux);margin-bottom:14px}
+.soin summary{cursor:pointer;color:var(--encre);font-size:14px;letter-spacing:.04em;list-style:none;display:inline-flex;gap:6px;align-items:center}
+.soin summary::-webkit-details-marker{display:none}
+.soin summary::before{content:"+";color:var(--or);font-size:18px;line-height:1}
+.soin details[open] summary::before{content:"–"}
+.soin ul{margin:8px 0 0;padding-left:18px}
+.bas{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid var(--trait)}
+.prix{font-family:Cormorant,serif;font-size:26px;font-weight:500}
+.ajouter{font:400 14px Jost,sans-serif;letter-spacing:.06em;background:none;border:1px solid var(--encre);color:var(--encre);border-radius:99px;
+  padding:10px 18px;cursor:pointer;transition:all .2s}
+.ajouter{background:linear-gradient(135deg,#f6c95c,#fb68ff);border:0;color:#2a1a4a;font-weight:500}
+.ajouter:hover{filter:brightness(1.05)}
+.ajouter.ajoute{background:transparent;border:1px solid var(--trait);color:var(--doux)}
+
+.vedette{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;background:var(--surface);border:1px solid var(--trait);
+  border-radius:28px;padding:22px;margin-bottom:64px;position:relative;overflow:hidden}
+.vedette::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
+.vedette{padding:22px!important}
+.vedette .image{aspect-ratio:1/1;border-radius:20px;overflow:hidden}
+.vedette .image img{width:100%;height:100%;object-fit:cover;display:block}
+.vedette .texte{padding:10px 26px 10px 0}
+.vedette h3{font-size:clamp(36px,4.4vw,54px);margin:12px 0 16px}
+.vedette p{color:var(--doux);margin:0 0 20px}
+.vedette .bas{border-top:1px solid var(--trait)}
+@media (max-width:860px){.vedette{grid-template-columns:1fr;gap:20px}.vedette .texte{padding:0 6px 6px}}
+
+/* Trouver mon soin */
+.guide{padding:84px 16px 0;text-align:center}
+.guide h2{font-size:clamp(34px,4.6vw,52px);margin:12px auto 12px;max-width:760px}
+.guide-intro{color:var(--doux);margin:0 auto 28px;max-width:560px}
+.ressentis{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:900px;margin:0 auto}
+.ressentis button{font:400 15px Jost,sans-serif;border:1px solid var(--trait);background:var(--surface);color:var(--encre);border-radius:99px;
+  padding:12px 20px;cursor:pointer;transition:all .2s}
+.ressentis button:hover{border-color:var(--or)}
+.ressentis button[aria-pressed="true"]{border-color:transparent;background:linear-gradient(135deg,#f6c95c,#fb68ff);color:#2a1a4a;font-weight:500}
+.conseil{max-width:900px;margin:30px auto 0;text-align:left;background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:22px;position:relative;overflow:hidden}
+.conseil::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--prisme)}
+.conseil > p{margin:0 0 16px;color:var(--doux)}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mini button{display:flex;gap:12px;align-items:center;text-align:left;font:inherit;color:inherit;background:var(--fond);border:1px solid var(--trait);border-radius:14px;padding:8px;cursor:pointer}
+.mini button:hover{border-color:var(--or)}
+.mini img{width:58px;height:58px;border-radius:10px;object-fit:cover;flex:none}
+.mini span{font-family:Cormorant,serif;font-size:19px;line-height:1.15}
+.mini small{display:block;font-family:Jost,sans-serif;color:var(--or);font-size:13px;margin-top:2px}
+.recherche{margin:-8px 0 36px}
+.recherche input{width:100%;font:300 16px Jost,sans-serif;padding:15px 20px;border:1px solid var(--trait);border-radius:99px;background:var(--surface);color:var(--encre)}
+.recherche input:focus{outline:2px solid var(--or-clair);border-color:var(--or)}
+.rien{color:var(--doux);text-align:center}
+.soin .image,.soin h3{cursor:pointer}
+.voir{font:400 14px Jost,sans-serif;background:none;border:0;color:var(--doux);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+/* Fiche d'un soin */
+.fiche img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;margin-bottom:18px}
+.fiche h2{font-size:34px}
+.fiche h4{font:400 12px Jost,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--or);margin:20px 0 6px}
+.fiche ul{margin:0;padding-left:18px;color:var(--doux)}
+.fiche .pratique{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;color:var(--doux);font-size:15px}
+.fiche .pratique b{font-weight:400;color:var(--encre)}
+
+.programmes{margin-bottom:90px}
+.programmes h2{font-size:clamp(38px,5vw,58px);margin:10px 0 8px}
+.programmes-intro{color:var(--doux);margin:0 0 30px}
+.programmes .vedette{margin-bottom:28px}
+.grille-programmes{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+
+/* Comment ça marche */
+.etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
+@media (max-width:760px){.etapes{grid-template-columns:1fr}}
+.etape{border-top:1px solid var(--encre);padding-top:20px}
+.etape .num{font-family:Cormorant,serif;font-style:italic;font-size:42px;color:var(--or);line-height:1}
+.etape h3{font-size:28px;margin:10px 0 8px}
+.etape p{color:var(--doux);margin:0}
+.citation{text-align:center;padding:90px 0 100px;position:relative}
+.citation p{font-family:Cormorant,serif;font-style:italic;font-size:clamp(26px,3.6vw,40px);line-height:1.3;max-width:820px;margin:0 auto 18px}
+.citation small{color:var(--doux);letter-spacing:.06em}
+.citation .prisme{margin:0 auto 34px}
+
+/* Panier */
+.panier-bouton{position:fixed;right:16px;bottom:16px;z-index:5}
+.panier-bouton button{font:400 15px Jost,sans-serif;letter-spacing:.05em;border:0;border-radius:99px;padding:15px 22px;cursor:pointer;
+  background:linear-gradient(135deg,#f6c95c,#fb68ff);color:#2a1a4a;font-weight:500;box-shadow:0 18px 40px -12px rgba(233,139,169,.7);display:flex;gap:10px;align-items:center}
+.panier-bouton .nb{background:#fff;color:#1d1446;border-radius:99px;min-width:24px;height:24px;display:inline-grid;place-items:center;font-size:13px;font-weight:500}
+dialog{border:0;border-radius:24px;padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px);background:var(--surface);color:var(--encre);
+  box-shadow:0 40px 100px rgba(10,5,40,.4)}
+dialog::backdrop{background:rgba(22,15,58,.45);backdrop-filter:blur(3px)}
+.dlg{padding:30px}
+.dlg h2{font-size:38px;margin-bottom:14px}
+.ligne{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--trait);font-size:15.5px}
+.ligne button{border:0;background:none;color:var(--orchidee);cursor:pointer;font:inherit;font-size:13px}
+.total{display:flex;justify-content:space-between;font-family:Cormorant,serif;font-size:26px;margin:16px 0}
+label{display:block;font-size:14px;letter-spacing:.04em;margin-top:14px;color:var(--doux)}
+input[type=text],input[type=email]{width:100%;font:400 16px Jost,sans-serif;padding:13px 16px;border:1px solid var(--trait);border-radius:12px;background:var(--fond);color:var(--encre);margin-top:6px}
+input:focus{outline:2px solid var(--or-clair);border-color:var(--or)}
+.case{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;letter-spacing:0}
+.case input{margin-top:4px;accent-color:var(--encre)}
+.actions{display:flex;gap:12px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap;align-items:center}
+.lien{background:none;border:0;font:inherit;font-size:14px;color:var(--doux);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.encadre{background:var(--fond);border:1px solid var(--trait);border-radius:16px;padding:16px 18px;margin:14px 0;font-size:15.5px}
+.encadre b{font-weight:500}
+.ref{font-family:Cormorant,serif;font-size:30px;letter-spacing:.06em;color:var(--or);margin:0 0 6px}
+.rib{max-width:100%;border-radius:10px;margin-top:8px}
+.attention{background:#fff1c9;color:#5a4400;border-radius:10px;padding:10px 14px;font-size:14px;margin-top:10px}
+.paypal{background:#0b3a8a;border-color:#0b3a8a;color:#fff;margin:10px 0 6px}
+textarea{width:100%;height:120px;margin-top:8px;font:13px/1.45 ui-monospace,Menlo,monospace;border-radius:10px;border:1px solid var(--trait);background:var(--surface);color:var(--encre);padding:10px}
+
+footer{background:var(--nuit);color:#cfc6e6;padding:56px 0 100px;font-size:14px}
+footer .marque{color:#fff}
+footer .colonnes{display:grid;grid-template-columns:1.3fr 1fr;gap:30px;margin-top:20px}
+@media (max-width:700px){footer .colonnes{grid-template-columns:1fr}}
+footer details{border-top:1px solid rgba(255,255,255,.12);padding:12px 0}
+footer summary{cursor:pointer;color:#fff;letter-spacing:.04em}
+footer p{margin:10px 0 0}
+footer .prisme{margin:18px 0}
+</style>
+</head>
+<body>
+
+<header class="ouverture">
+  <div class="arc-ciel" aria-hidden="true"></div>
+  <div class="scintilles" id="scintilles" aria-hidden="true"></div>
+  <div class="page">
+    <div class="barre">
+      <a class="marque script" style="font-size:clamp(26px,3.4vw,34px)" href="#">L'Atelier fait d'Étoiles</a>
+      <nav class="liens" aria-label="Menu"><a href="#soins">Les soins</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
+    </div>
+    <div class="ouverture-grille">
+      <div>
+        <div class="sur-titre">Bien-être · Lumière · Souveraineté</div>
+        <div class="prisme"></div>
+        <h1 class="script">Diwéra Devienne</h1>
+        <p class="phrase script" style="color:#fff;text-shadow:0 1px 10px rgba(32,1,116,.5)">Mes soins énergétiques en vidéo</p>
+        <p class="intro">Enseignante et guérisseuse, je vous accompagne avec douceur pour libérer ce qui pèse et retrouver votre souveraineté.
+          Chaque soin se regarde chez vous, autant de fois que vous le souhaitez.</p>
+        <p class="protection">Les échanges présentés ici relèvent d'une démarche de bien-être et de développement personnel.
+          Ces soins ne remplacent jamais un avis ou un traitement médical : votre médecin reste votre premier allié.</p>
+        <div class="boutons"><a class="btn" href="#soins">Découvrir les soins</a><a class="btn clair" href="#comment">Comment ça marche</a></div>
+      </div>
+      <div style="position:relative;justify-self:center;width:min(470px,100%);z-index:1">
+        <div class="arche" id="arche"></div>
+        <div class="etiquette-arche"><small>Le chemin complet</small><b>L'intégrale des soins</b><small id="prixIntegrale"></small></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <div class="promesses">
+    <div><b>Chez vous</b>vidéo à regarder à votre rythme</div>
+    <div><b>À volonté</b>chaque soin se revoit autant que souhaité</div>
+    <div><b>Simple</b>paiement par PayPal ou virement</div>
+  </div>
+</div>
+
+<section class="page guide" id="guide">
+  <div class="sur-titre">Trouver mon soin</div>
+  <h2>Qu'est-ce que vous traversez en ce moment ?</h2>
+  <p class="guide-intro">Choisissez ce qui résonne en vous : je vous montre les soins qui peuvent vous accompagner.</p>
+  <div class="ressentis" id="ressentis"></div>
+  <div class="conseil" id="conseil" hidden></div>
+</section>
+
+<main class="page section" id="soins">
+  <section class="programmes" id="programmes">
+    <div class="sur-titre">Les programmes</div>
+    <h2>Les chemins complets</h2>
+    <p class="programmes-intro">Plusieurs soins réunis pour avancer pas à pas, en profondeur.</p>
+    <div id="vedette"></div>
+    <div class="grille grille-programmes" id="grilleProgrammes"></div>
+  </section>
+  <div class="entete-section">
+    <div><div class="sur-titre">Les soins à l'unité</div><h2 id="titreListe">Tous les soins</h2></div>
+    <nav class="filtres" id="filtres" aria-label="Choisir une famille de soins"></nav>
+  </div>
+  <div class="recherche"><input type="search" id="recherche" placeholder="Rechercher un soin : karma, confiance, protection…" aria-label="Rechercher un soin"></div>
+  <p class="rien" id="rien" hidden>Pour ce mot, essayez plutôt « karma », « blessure » ou « protection »… ou écrivez-moi : je vous guide avec plaisir.</p>
+  <div class="grille" id="grille"></div>
+
+  <section id="comment" style="padding-top:110px">
+    <div class="sur-titre">Comment ça marche</div>
+    <h2 style="font-size:clamp(38px,5vw,58px);margin-top:10px">Trois gestes simples</h2>
+    <div class="etapes">
+      <div class="etape"><div class="num">01</div><h3>Je choisis</h3><p>J'ajoute un ou plusieurs soins à mon panier.</p></div>
+      <div class="etape"><div class="num">02</div><h3>Je commande</h3><p>Je laisse mon prénom et mon e-mail, je reçois ma référence.</p></div>
+      <div class="etape"><div class="num">03</div><h3>Je reçois</h3><p>Je paie par PayPal ou par virement ; mon soin arrive par e-mail.</p></div>
+    </div>
+  </section>
+</main>
+
+<section class="citation page">
+  <div class="prisme"></div>
+  <p>« Ces soins accompagnent votre chemin intérieur, avec amour et lumière. »</p>
+  <small>Ils complètent un avis ou un traitement médical : votre médecin reste votre premier allié.</small>
+</section>
+
+<div class="panier-bouton"><button id="ouvrirPanier" aria-label="Ouvrir mon panier">Mon panier <span class="nb" id="nbPanier">0</span></button></div>
+<dialog id="dlg"><div class="dlg" id="contenuDlg"></div></dialog>
+
+<footer>
+  <div class="page">
+    <a class="marque" href="#">Diwéra <span>Devienne</span></a>
+    <div class="prisme"></div>
+    <div class="colonnes">
+      <div>
+        <details><summary>Mentions légales</summary><p id="mentions"></p></details>
+        <details><summary>Conditions de vente</summary>
+          <p>Les soins sont des vidéos à regarder en ligne. Le prix est indiqué en euros, toutes taxes comprises.
+             Le paiement se fait de préférence par PayPal, ou par virement bancaire, avec la référence de commande. Le lien du soin est envoyé par e-mail
+             dès réception du paiement, en général sous 48 h. En commandant, l'acheteur accepte de recevoir le soin
+             dès le paiement reçu et renonce ainsi à son droit de rétractation de 14 jours (article L221-28 du Code de la consommation).
+             Pour toute question, écrivez à l'adresse de contact.</p>
+          <p>Les soins énergétiques accompagnent le bien-être. Ils complètent le suivi médical : pour toute question de santé,
+             votre médecin reste votre premier allié.</p>
+        </details>
+        <details><summary>Données personnelles</summary>
+          <p>Votre prénom et votre e-mail servent seulement à traiter votre commande et à vous envoyer votre soin.
+             Ils restent privés. Vous pouvez demander leur suppression à tout moment par e-mail.</p>
+        </details>
+      </div>
+      <div>
+        <p>Une question ? <a id="contactPied" href="#"></a></p>
+        <p>© <span id="annee"></span> Diwéra Devienne — L'Atelier fait d'Étoiles</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   SOINS — repris de sa boutique Wix (mêmes noms, prix et images)
+   Pour ajouter un soin : copier une ligne { ... } et la modifier.
+   img = nom de l'image sur son Wix (static.wixstatic.com/media/...)
+   ============================================================ */
+const SOINS = [
+  { id:"integrale", cat:"Programmes", vedette:true, titre:"L'intégrale des soins de Diwéra", prix:675,
+    img:"8c1cfb_41eb28c23fd34079b702b7ec4379c446~mv2.jpg",
+    accroche:"Toutes mes séances de soin réunies : blessures de l'âme, mémoires karmiques et familiales, karma amoureux, libération des blocages. Un chemin complet, à suivre à votre rythme, tranquillement chez vous.",
+    pourVous:["Vous aimez avancer en profondeur, étape par étape","Vous souhaitez un accompagnement complet, à revoir quand vous en ressentez l'appel"] },
+
+  { id:"karma", cat:"Karma et lignée", titre:"Et si ça n'était pas votre karma ?", prix:70,
+    img:"8c1cfb_06be27bc90644447b5f2b7107c42dfe0~mv2.jpg",
+    accroche:"Et si une partie de ce que vous vivez venait d'ailleurs ? Un soin pour libérer ce qui a été posé sur votre chemin et retrouver le vôtre, libre et lumineux.",
+    pourVous:["Vous avez l'impression de porter un poids qui vous dépasse","Vous avez envie de retrouver votre propre chemin"] },
+  { id:"transgen", cat:"Karma et lignée", titre:"Soin de désolidarisation du transgénérationnel", prix:50,
+    img:"8c1cfb_2c7a842a546845e285a9de597e6b2b61~mv2.jpg",
+    accroche:"Et si une partie de ce que vous portez appartenait à votre lignée ? Rendre à chacun ce qui lui revient, avec amour.",
+    pourVous:["Vous avez l'impression de tourner en rond malgré tout votre travail","Des schémas se répètent dans votre famille"] },
+  { id:"egypte", cat:"Karma et lignée", titre:"Séance de libération du karma avec l'Égypte", prix:50,
+    img:"8c1cfb_0e052f4c5b2a410db07ac513656f1b59~mv2.png",
+    accroche:"Libérer les mémoires de l'Égypte ancienne pour garder la grandeur spirituelle et laisser partir le reste.",
+    pourVous:["Vous ressentez un lien fort avec l'Égypte ancienne","Des vœux ou pactes anciens résonnent en vous"] },
+
+  { id:"emprises", cat:"Protection", titre:"Soin de libération des emprises", prix:50,
+    img:"8c1cfb_1476c9b5feef43a08a9fea90b8dcbf39~mv2.jpg",
+    accroche:"Dissoudre les emprises énergétiques pour retrouver votre plein libre arbitre.",
+    pourVous:["Vous sentez votre liberté comme freinée","Des liens lourds ou des habitudes d'auto-sabotage persistent"] },
+  { id:"envoutement", cat:"Protection", titre:"Soin de désenvoûtement", prix:50,
+    img:"8c1cfb_13291b2163c14dc4b3379318c5b0f494~mv2.png",
+    accroche:"Un nettoyage karmique profond des envoûtements, anciens ou récents, pour retrouver souveraineté, clarté et paix.",
+    pourVous:["Vous ressentez des blocages ou une fatigue difficiles à expliquer","Vous souhaitez reprendre pleinement votre souveraineté"] },
+  { id:"entites", cat:"Protection", titre:"Apprenez à vous libérer des entités : enseignement et soin", prix:70,
+    img:"8c1cfb_2bd5924c92d94417a47931bc4985bed3~mv2.webp",
+    accroche:"Un enseignement, un soin et un nettoyage karmique réunis, pour apprendre aussi à vous protéger vous-même.",
+    pourVous:["Vous ressentez souvent une lourdeur ou des baisses de vibration","Vous aimeriez savoir prendre soin de votre énergie en autonomie"] },
+
+  { id:"illegitimite", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure d'illégitimité", prix:50,
+    img:"8c1cfb_b16db77e9dae457a85423aa89e4c3490~mv2.png",
+    accroche:"Se sentir légitime d'exister, d'aimer et d'être aimé, de prendre sa place avec sérénité.",
+    pourVous:["Vous vous demandez souvent si vous méritez le bonheur","Vous avez envie d'oser enfin prendre votre place"] },
+  { id:"cristal", cat:"Blessures de l'âme", titre:"Soin de dé-cristallisation des mémoires traumatiques", prix:50,
+    img:"8c1cfb_d4b0850abe5643f58e40f32a92fcf0c1~mv2.png",
+    accroche:"Adoucir et libérer les mémoires figées par les chocs, pour que la vie circule de nouveau en vous.",
+    pourVous:["Un souvenir difficile reste très présent","Vous avez envie de retrouver légèreté et mouvement"] },
+  { id:"injustice", cat:"Blessures de l'âme", ruban:"BestSeller", titre:"Soin de libération émotionnelle de la blessure d'injustice", prix:50,
+    img:"8c1cfb_590e7f1a5cf54b3392f158260b0b9320~mv2.png",
+    accroche:"Apaiser la colère et le sentiment d'injustice pour pouvoir, peu à peu, tourner la page.",
+    pourVous:["La colère envers ce qui s'est passé reste vive","Vous avez envie de retrouver la paix"] },
+  { id:"humiliation", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure d'humiliation", prix:50,
+    img:"8c1cfb_5e49cc03e0784347bce4032c287f6530~mv2.jpg",
+    accroche:"Libérer la honte qui vous a été transmise et retrouver la fierté d'être vous.",
+    pourVous:["La honte vous accompagne depuis longtemps","Vous souhaitez retrouver votre dignité et votre élan"] },
+  { id:"intrusion", cat:"Blessures de l'âme", ruban:"Nouveau", titre:"Soin de libération de la blessure d'intrusion", prix:50,
+    img:"8c1cfb_eb2c534b56924078928cd876d280dfaa~mv2.png",
+    accroche:"Retrouver son espace, ses limites et la sécurité dans son corps et dans sa vie.",
+    pourVous:["Vous avez du mal à poser vos limites","Vous souhaitez vous sentir de nouveau chez vous, dans votre corps"] },
+  { id:"devalorisation", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure de dévalorisation", prix:50,
+    img:"8c1cfb_182c13143e2847678a27cc1661c5b9f1~mv2.jpg",
+    accroche:"Laisser partir le regard dur sur soi et accueillir sa propre lumière, telle qu'elle est.",
+    pourVous:["Des pensées sévères sur vous-même reviennent souvent","Vous souhaitez des relations plus douces et épanouissantes"] },
+  { id:"trahison", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure de trahison", prix:50,
+    img:"8c1cfb_7fdd00eb54ae4bddb38de761395e23e9~mv2.jpg",
+    accroche:"Apaiser la mémoire de la trahison pour retrouver la confiance, en soi et en la vie.",
+    pourVous:["La méfiance s'invite dans vos relations","Vous souhaitez vous sentir de nouveau en sécurité avec les autres"] },
+  { id:"integrite", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure de la perte d'intégrité", prix:50,
+    img:"8c1cfb_5ba82eb79fdd4f2399cfd448cb4a0832~mv2.jpg",
+    accroche:"Rassembler toutes les parties de soi et retrouver la paix intérieure, entière et alignée.",
+    pourVous:["Vous ressentez des conflits intérieurs, de la honte ou de la culpabilité","Vous avez envie de vous sentir de nouveau entier"] },
+  { id:"confiance", cat:"Blessures de l'âme", titre:"Soin de libération de la blessure du manque de confiance et d'estime de soi", prix:50,
+    img:"8c1cfb_8470531c1e654cfc8189957778e997f5~mv2.jpg",
+    accroche:"Retrouver l'élan de croire en soi, la douceur envers soi-même et la joie de se sentir digne d'amour.",
+    pourVous:["Vous doutez souvent de votre valeur","Vous avez envie de vous sentir enfin à votre place"] },
+
+  { id:"salie", cat:"Après une agression", titre:"Soin de libération du sentiment de se sentir salie après un abus sexuel", prix:50,
+    img:"8c1cfb_4153c34cc10d49bd82cf750394ec5950~mv2.jpg",
+    accroche:"Laisser partir l'empreinte laissée par l'agression et retrouver la pureté et la douceur de son être.",
+    pourVous:["Un sentiment de saleté ou de culpabilité vous accompagne","Vous avez envie de vous sentir bien dans votre corps"] },
+  { id:"ame-abus", cat:"Après une agression", titre:"Soin de libération des blessures de l'âme après un abus sexuel", prix:50,
+    img:"8c1cfb_021f19b152744387868c49e20717c14b~mv2.jpg",
+    accroche:"Un espace doux et protégé pour commencer à déposer la douleur et retrouver la confiance.",
+    pourVous:["Une tristesse, une colère ou une douleur restent présentes","Vous avez envie de vous ouvrir de nouveau, à votre rythme"] },
+  { id:"pack1", cat:"Programmes", titre:"Programme d'accompagnement et de libération après un viol ou un abus sexuel 1/2", prix:150,
+    img:"8c1cfb_44097f4c29b34f63aaff6b5ac9a5031c~mv2.jpg",
+    accroche:"La première étape : plusieurs soins réunis pour commencer à se libérer, en douceur et à son rythme.",
+    pourVous:["Vous souhaitez être accompagnée pas à pas","Vous avez envie de commencer votre chemin de libération"] },
+  { id:"programme2", cat:"Programmes", titre:"Programme de soins d'accompagnement et de libération après un viol 2/2", prix:150,
+    img:"8c1cfb_44097f4c29b34f63aaff6b5ac9a5031c~mv2.jpg",
+    accroche:"La deuxième étape du programme d'accompagnement, pour continuer le chemin avec douceur.",
+    pourVous:["Vous avez suivi la première étape","Vous avez envie d'aller plus loin dans votre libération"] },
+  { id:"programme", cat:"Programmes", titre:"Programme de libération des blessures de l'âme après une agression sexuelle", prix:300,
+    img:"8c1cfb_44097f4c29b34f63aaff6b5ac9a5031c~mv2.jpg",
+    accroche:"Le programme complet d'accompagnement : tous les soins réunis pour se reconstruire pas à pas, avec douceur.",
+    pourVous:["Vous souhaitez un accompagnement complet","Vous avez envie d'avancer étape par étape, à votre rythme"] }
+];
+
+/* TROUVER MON SOIN — ce que la personne traverse → les soins proposés (ids ci-dessus) */
+const GUIDE = [
+  { ressenti:"Je doute de moi", soins:["confiance","devalorisation","illegitimite"] },
+  { ressenti:"Je me sens lourde, bloquée", soins:["envoutement","emprises","entites"] },
+  { ressenti:"Les mêmes schémas se répètent", soins:["transgen","karma","egypte"] },
+  { ressenti:"J'ai été trahie, blessée", soins:["trahison","injustice","humiliation"] },
+  { ressenti:"Un choc reste présent", soins:["cristal","integrite","intrusion"] },
+  { ressenti:"J'ai vécu une agression", soins:["ame-abus","salie","pack1","programme"] },
+  { ressenti:"Je veux tout le chemin", soins:["integrale","programme"] }
+];
+
+/* ============================================================ */
+const euros = n => n.toLocaleString("fr-FR") + " €";
+const image = (nom, l, h) => `https://static.wixstatic.com/media/${nom}/v1/fill/w_${l},h_${h || l},al_c,q_85,enc_auto/${nom}`;
+const $ = s => document.querySelector(s);
+let panier = [];
+try { panier = JSON.parse(localStorage.getItem("panier-diwera") || "[]").filter(id => SOINS.some(s => s.id === id)); } catch(e) {}
+const sauver = () => { try { localStorage.setItem("panier-diwera", JSON.stringify(panier)); } catch(e) {} };
+
+// étoiles comme le générique de début : un ciel pailleté, plus dense en haut
+const sc = $("#scintilles");
+const haut = () => Math.pow(Math.random(), 1.6) * 92;   // plus d'étoiles vers le haut
+for (let i = 0; i < 90; i++) {            // petites paillettes
+  const e = document.createElement("span"); e.className = "point";
+  e.style.left = (Math.random()*100) + "%"; e.style.top = haut() + "%";
+  const d = 1.5 + Math.random()*2.5; e.style.width = e.style.height = d + "px";
+  e.style.animationDelay = (Math.random()*2.6) + "s"; e.style.animationDuration = (1.8 + Math.random()*2.2) + "s";
+  sc.appendChild(e);
+}
+for (let i = 0; i < 60; i++) {            // étoiles en croix qui scintillent
+  const e = document.createElement("span"); e.className = "scintille" + (i % 3 === 0 ? " blanche" : "");
+  e.innerHTML = "<i></i>";
+  e.style.left = (Math.random()*100) + "%"; e.style.top = haut() + "%";
+  const grande = i % 9 === 0; const d = grande ? 30 + Math.random()*16 : 8 + Math.random()*14;
+  e.style.width = e.style.height = d + "px";
+  e.style.animationDelay = (Math.random()*3) + "s"; e.style.animationDuration = (2 + Math.random()*2.5) + "s";
+  sc.appendChild(e);
+}
+$("#lienSite").href = REGLAGES.site;
+$("#contactPied").href = "mailto:" + REGLAGES.email; $("#contactPied").textContent = REGLAGES.email;
+
+const VEDETTE = SOINS.find(s => s.vedette);
+$("#arche").innerHTML = `<img src="${image(VEDETTE.img, 1000)}" alt="${VEDETTE.titre}">`;
+$("#prixIntegrale").textContent = euros(VEDETTE.prix);
+
+// filtres
+const PROGRAMMES = SOINS.filter(s => !s.vedette && s.cat === "Programmes");
+const AUTRES = SOINS.filter(s => !s.vedette && s.cat !== "Programmes");
+const familles = ["Tous", ...new Set(AUTRES.map(s => s.cat))];
+let filtre = "Tous";
+$("#filtres").innerHTML = familles.map(f => `<button type="button" aria-pressed="${f===filtre}" data-f="${f}">${f}</button>`).join("");
+$("#filtres").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return; filtre = b.dataset.f;
+  document.querySelectorAll("#filtres button").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === filtre));
+  afficher();
+});
+
+// trouver mon soin
+const soinPar = id => SOINS.find(s => s.id === id);
+$("#ressentis").innerHTML = GUIDE.map((g, i) => `<button type="button" aria-pressed="false" data-g="${i}">${g.ressenti}</button>`).join("");
+$("#ressentis").addEventListener("click", e => {
+  const b = e.target.closest("button[data-g]"); if (!b) return;
+  const deja = b.getAttribute("aria-pressed") === "true";
+  document.querySelectorAll("#ressentis button").forEach(x => x.setAttribute("aria-pressed", "false"));
+  const c = $("#conseil");
+  if (deja) { c.hidden = true; return; }
+  b.setAttribute("aria-pressed", "true");
+  const g = GUIDE[+b.dataset.g];
+  c.innerHTML = `<p>Avec douceur, voici les soins que je vous propose. Écoutez ce qui résonne en vous : c'est votre ressenti qui choisit.</p>
+    <div class="mini">${g.soins.map(soinPar).filter(Boolean).map(s => `<button type="button" data-voir="${s.id}"><img src="${image(s.img, 160)}" alt=""><span>${s.titre}<small>${euros(s.prix)}</small></span></button>`).join("")}</div>`;
+  c.hidden = false;
+});
+
+// recherche
+let recherche = "";
+const sansAccent = t => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+$("#recherche").addEventListener("input", e => { recherche = sansAccent(e.target.value.trim()); afficher(); });
+
+// fiche d'un soin
+function vueFiche(id){
+  const s = soinPar(id);
+  $("#contenuDlg").innerHTML = `<div class="fiche">
+    <img src="${image(s.img, 1000, 625)}" alt="${s.titre}">
+    <div class="sur-titre">${s.cat}</div><h2>${s.titre}</h2>
+    <p style="color:var(--doux)">${s.accroche}</p>
+    <h4>Ce soin est fait pour vous si</h4><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul>
+    <h4>Informations pratiques</h4>
+    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}</span></div>
+    <p style="color:var(--doux);font-size:14px;margin-top:18px">Ce soin accompagne votre chemin ; votre médecin reste votre premier allié.</p>
+    <div class="actions"><button type="button" class="lien" data-a="fermer">Fermer</button>${bouton(s)}</div></div>`;
+  if (!dlg.open) dlg.showModal();
+}
+document.addEventListener("click", e => {
+  const v = e.target.closest("[data-voir]"); if (!v) return;
+  vueFiche(v.dataset.voir);
+});
+
+const bouton = s => { const dans = panier.includes(s.id); return `<button class="ajouter${dans ? " ajoute" : ""}" data-id="${s.id}">${dans ? "Dans le panier ✓" : "Ajouter"}</button>`; };
+const pourVous = s => `<details><summary>Ce soin est fait pour vous si…</summary><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul></details>`;
+const carteSoin = s => `
+    <article class="soin">
+      <div class="image" data-voir="${s.id}"><img loading="lazy" src="${image(s.img, 640)}" alt="${s.titre}">${s.ruban ? `<span class="ruban">${s.ruban}</span>` : ""}</div>
+      <div class="cat">${s.cat}</div><h3 data-voir="${s.id}">${s.titre}</h3><p>${s.accroche}</p>${pourVous(s)}
+      <div class="bas"><span class="prix">${euros(s.prix)}</span>${bouton(s)}</div>
+    </article>`;
+function afficher(){
+  const v = VEDETTE;
+  $("#grilleProgrammes").innerHTML = PROGRAMMES.map(carteSoin).join("");
+  $("#vedette").innerHTML = `<article class="vedette soin">
+      <div class="image" data-voir="${v.id}"><img src="${image(v.img, 900)}" alt="${v.titre}"></div>
+      <div class="texte"><div class="sur-titre">Le chemin complet</div><h3>${v.titre}</h3><p>${v.accroche}</p>${pourVous(v)}
+        <div class="bas"><span class="prix">${euros(v.prix)}</span>${bouton(v)}</div></div></article>`;
+  const liste = AUTRES.filter(s => (filtre === "Tous" || s.cat === filtre) &&
+    (!recherche || sansAccent(s.titre + " " + s.accroche + " " + s.cat + " " + s.pourVous.join(" ")).includes(recherche)));
+  $("#titreListe").textContent = filtre === "Tous" ? "Tous les soins" : filtre;
+  $("#rien").hidden = liste.length > 0;
+  $("#grille").innerHTML = liste.map(carteSoin).join("");
+  $("#nbPanier").textContent = panier.length;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]"); if (!b) return;
+  const id = b.dataset.id;
+  panier = panier.includes(id) ? panier.filter(x => x !== id) : [...panier, id];
+  sauver(); afficher();
+  if (b.closest(".fiche")) vueFiche(id);
+});
+
+// panier
+const dlg = $("#dlg");
+const total = () => panier.reduce((t, id) => t + SOINS.find(s => s.id === id).prix, 0);
+function vuePanier(){
+  if (!panier.length) {
+    $("#contenuDlg").innerHTML = `<h2>Mon panier</h2><p style="color:var(--doux)">Votre panier attend son premier soin.</p>
+      <div class="actions"><button class="btn" data-a="fermer">Voir les soins</button></div>`;
+    return;
+  }
+  $("#contenuDlg").innerHTML = `<h2>Mon panier</h2>
+    ${panier.map(id => { const s = SOINS.find(x => x.id === id); return `<div class="ligne"><span>${s.titre}</span><span style="white-space:nowrap">${euros(s.prix)} <button data-retirer="${id}" aria-label="Retirer">retirer</button></span></div>`; }).join("")}
+    <div class="total"><span>Total</span><span>${euros(total())}</span></div>
+    <form id="formCommande">
+      <label for="prenom">Votre prénom</label><input type="text" id="prenom" required autocomplete="given-name">
+      <label for="mail">Votre e-mail, pour recevoir le soin</label><input type="email" id="mail" required autocomplete="email">
+      <label class="case"><input type="checkbox" required> J'accepte les conditions de vente et je souhaite recevoir mon soin dès le paiement reçu ; je renonce ainsi au délai de rétractation de 14 jours.</label>
+      <div class="actions"><button type="button" class="lien" data-a="fermer">Continuer mes achats</button><button class="btn" type="submit">Je commande</button></div>
+    </form>`;
+}
+function vuePaiement(prenom, mail){
+  const ref = "DIW-" + Date.now().toString(36).toUpperCase().slice(-5);
+  const lignes = panier.map(id => { const s = SOINS.find(x => x.id === id); return "- " + s.titre + " (" + euros(s.prix) + ")"; }).join("\n");
+  const montant = total();
+  const texte = `Bonjour Diwéra,\n\nVoici ma commande ${ref} :\n${lignes}\nTotal : ${euros(montant)}\n\nPrénom : ${prenom}\nE-mail : ${mail}\n\nJe paie par PayPal ou par virement avec la référence ${ref}.\nMerci !`;
+  const mailto = REGLAGES.email ? `mailto:${REGLAGES.email}?subject=${encodeURIComponent("Commande " + ref)}&body=${encodeURIComponent(texte)}` : "";
+  const lienPaypal = REGLAGES.paypal ? REGLAGES.paypal.replace(/\/+$/, "") + "/" + montant + "EUR" : "";
+  $("#contenuDlg").innerHTML = `<h2>Merci ${prenom}</h2>
+    <div class="sur-titre">Votre référence</div><p class="ref">${ref}</p>
+    <div class="encadre"><b>1 — Envoyez votre commande</b><br>
+      ${mailto ? `<a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>
+      <br><small style="color:var(--doux)">Ou copiez ce texte et envoyez-le à <b>${REGLAGES.email}</b> :</small>` : `<div class="attention">Adresse e-mail de la boutique à compléter dans les réglages.</div>`}
+      <textarea readonly>${texte}</textarea>
+      <button class="lien" data-a="copier">Copier le texte</button></div>
+    <div class="encadre"><b>2 — Payez ${euros(montant)}</b><br>
+      De préférence par PayPal, le plus rapide :<br>
+      ${lienPaypal ? `<a class="btn paypal" href="${lienPaypal}" target="_blank" rel="noopener">Payer ${euros(montant)} avec PayPal</a>
+      <br><small style="color:var(--doux)">Dans le message PayPal, notez votre référence <b>${ref}</b>.</small>` : `<div class="attention">Lien PayPal à compléter dans les réglages.</div>`}
+      <p style="margin:14px 0 0">Ou par virement bancaire, avec la référence <b>${ref}</b> en libellé.
+      ${REGLAGES.rib ? `<img class="rib" src="${REGLAGES.rib}" alt="RIB de Diwéra">` : `<br><span style="color:var(--doux)">Les coordonnées bancaires vous sont envoyées par e-mail en réponse à votre commande.</span>`}</p></div>
+    <div class="encadre"><b>3 — Recevez votre soin</b><br>Dès le paiement reçu, votre soin arrive par e-mail, en général sous 48 h.</div>
+    <div class="actions"><button class="btn" data-a="fini">Revenir à la boutique</button></div>`;
+  panier = []; sauver(); afficher();
+}
+$("#ouvrirPanier").addEventListener("click", () => { vuePanier(); dlg.showModal(); });
+dlg.addEventListener("click", e => {
+  if (e.target === dlg) return dlg.close();
+  const r = e.target.closest("[data-retirer]");
+  if (r) { panier = panier.filter(x => x !== r.dataset.retirer); sauver(); afficher(); vuePanier(); return; }
+  const a = e.target.closest("[data-a]"); if (!a) return;
+  if (a.dataset.a === "fermer" || a.dataset.a === "fini") dlg.close();
+  if (a.dataset.a === "copier") { const t = dlg.querySelector("textarea"); t.select(); try { navigator.clipboard.writeText(t.value); a.textContent = "Copié ✓"; } catch(e) {} }
+});
+dlg.addEventListener("submit", e => { e.preventDefault(); vuePaiement($("#prenom").value.trim(), $("#mail").value.trim()); });
+
+// mentions
+const m = REGLAGES;
+$("#mentions").innerHTML = `Éditrice : ${m.nomLegal || "Diwéra Devienne (nom légal à compléter)"} — SIRET : ${m.siret || "à compléter"}<br>
+  Contact : ${m.email || "à compléter"}<br>Hébergement : ${m.hebergeur || "indiqué dès la mise en ligne de la boutique"}`;
+$("#annee").textContent = new Date().getFullYear();
+afficher();
+</script>
+</body>
+</html>

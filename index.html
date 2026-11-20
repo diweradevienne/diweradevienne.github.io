@@ -172,6 +172,8 @@ nav.filtres button[aria-pressed="true"]{background:linear-gradient(135deg,#f6c95
 .soin ul{margin:8px 0 0;padding-left:18px}
 .bas{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid var(--trait)}
 .prix{font-family:Cormorant,serif;font-size:26px;font-weight:500}
+.prix s{font-size:18px;color:var(--doux);margin-right:8px}
+.promo{display:inline-block;background:linear-gradient(135deg,#f6c95c,#fb68ff);color:#2a1a4a;font:500 12px Jost,sans-serif;letter-spacing:.12em;text-transform:uppercase;border-radius:99px;padding:5px 12px;margin-bottom:8px}
 .ajouter{font:400 14px Jost,sans-serif;letter-spacing:.06em;background:none;border:1px solid var(--encre);color:var(--encre);border-radius:99px;
   padding:10px 18px;cursor:pointer;transition:all .2s}
 .ajouter{background:linear-gradient(135deg,#f6c95c,#fb68ff);border:0;color:#2a1a4a;font-weight:500}
@@ -455,7 +457,7 @@ footer .prisme{margin:18px 0}
    img = nom de l'image sur son Wix (static.wixstatic.com/media/...)
    ============================================================ */
 const SOINS = [
-  { id:"integrale", cat:"Programmes", vedette:true, titre:"L'intégrale des séances de Diwéra", prix:675,
+  { id:"integrale", cat:"Programmes", vedette:true, titre:"L'intégrale des séances de Diwéra", prix:630, prixAvant:675, promo:"Black Friday",
     img:"8c1cfb_41eb28c23fd34079b702b7ec4379c446~mv2.jpg",
     accroche:"Toutes mes séances réunies : blessures de l'âme, mémoires karmiques et familiales, karma amoureux, libération des blocages. Un chemin complet, à suivre à votre rythme, tranquillement chez vous.",
     pourVous:["Vous aimez avancer en profondeur, étape par étape","Vous souhaitez un accompagnement complet, à revoir quand vous en ressentez l'appel"] },
@@ -574,6 +576,8 @@ const MEDITATIONS = [
 
 /* ============================================================ */
 const euros = n => n.toLocaleString("fr-FR") + " €";
+const prixHTML = s => s.prixAvant ? `<s>${euros(s.prixAvant)}</s>${euros(s.prix)}` : euros(s.prix);
+const promoHTML = s => s.promo ? `<div class="promo">${s.promo} : ${euros(s.prix)} au lieu de ${euros(s.prixAvant)}</div>` : "";
 const image = (nom, l, h) => `https://static.wixstatic.com/media/${nom}/v1/fill/w_${l},h_${h || l},al_c,q_85,enc_auto/${nom}`;
 const $ = s => document.querySelector(s);
 let panier = [];
@@ -604,7 +608,7 @@ $("#contactPied").href = "mailto:" + REGLAGES.email; $("#contactPied").textConte
 
 const VEDETTE = SOINS.find(s => s.vedette);
 $("#arche").innerHTML = `<img src="${image(VEDETTE.img, 1000)}" alt="${VEDETTE.titre}">`;
-$("#prixIntegrale").textContent = euros(VEDETTE.prix);
+$("#prixIntegrale").textContent = VEDETTE.promo ? VEDETTE.promo + " : " + euros(VEDETTE.prix) + " au lieu de " + euros(VEDETTE.prixAvant) : euros(VEDETTE.prix);
 
 // filtres
 const PROGRAMMES = SOINS.filter(s => !s.vedette && s.cat === "Programmes");
@@ -654,7 +658,7 @@ function vueFiche(id){
     <p style="color:var(--doux)">${s.accroche}</p>
     <h4>Cette séance est faite pour vous si</h4><ul>${s.pourVous.map(x => `<li>${x}</li>`).join("")}</ul>
     <h4>Informations pratiques</h4>
-    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${euros(s.prix)}${pourProche(s) ? " — pour tout votre foyer ; " + euros(PRIX_PROCHE) + " pour un proche qui vit ailleurs, si vous avez déjà cette séance" : " — pour tout votre foyer"}</span></div>
+    <div class="pratique"><b>Format</b><span>Vidéo, envoyée par e-mail dès le paiement reçu</span><b>Usage</b><span>À regarder chez vous, autant de fois que souhaité</span><b>Tarif</b><span>${s.promo ? s.promo + " : " + euros(s.prix) + " au lieu de " + euros(s.prixAvant) : euros(s.prix)}${pourProche(s) ? " — pour tout votre foyer ; " + euros(PRIX_PROCHE) + " pour un proche qui vit ailleurs, si vous avez déjà cette séance" : " — pour tout votre foyer"}</span></div>
     <p style="color:var(--doux);font-size:14px;margin-top:18px">Cette séance accompagne votre chemin ; votre médecin reste votre premier allié.</p>
     <div class="actions"><button type="button" class="lien" data-a="fermer">Fermer</button>${bouton(s)}</div></div>`;
   if (!dlg.open) dlg.showModal();
@@ -672,15 +676,15 @@ const carteSoin = s => `
     <article class="soin">
       <div class="image" data-voir="${s.id}"><img loading="lazy" src="${image(s.img, 640)}" alt="${s.titre}">${s.ruban ? `<span class="ruban">${s.ruban}</span>` : ""}</div>
       <div class="cat">${s.cat}</div><h3 data-voir="${s.id}">${s.titre}</h3><p>${s.accroche}</p>${pourVous(s)}
-      <div class="bas"><span class="prix">${euros(s.prix)}</span>${bouton(s)}</div>${boutonProche(s)}
+      <div class="bas"><span class="prix">${prixHTML(s)}</span>${bouton(s)}</div>${boutonProche(s)}
     </article>`;
 function afficher(){
   const v = VEDETTE;
   $("#grilleProgrammes").innerHTML = PROGRAMMES.map(carteSoin).join("");
   $("#vedette").innerHTML = `<article class="vedette soin">
       <div class="image" data-voir="${v.id}"><img src="${image(v.img, 900)}" alt="${v.titre}"></div>
-      <div class="texte"><div class="sur-titre">Le chemin complet</div><h3>${v.titre}</h3><p>${v.accroche}</p>${pourVous(v)}
-        <div class="bas"><span class="prix">${euros(v.prix)}</span>${bouton(v)}</div></div></article>`;
+      <div class="texte"><div class="sur-titre">Le chemin complet</div>${promoHTML(v)}<h3>${v.titre}</h3><p>${v.accroche}</p>${pourVous(v)}
+        <div class="bas"><span class="prix">${prixHTML(v)}</span>${bouton(v)}</div></div></article>`;
   const liste = AUTRES.filter(s => (filtre === "Tous" || s.cat === filtre) &&
     (!recherche || sansAccent(s.titre + " " + s.accroche + " " + s.cat + " " + s.pourVous.join(" ")).includes(recherche)));
   $("#titreListe").textContent = filtre === "Tous" ? "Toutes les séances" : filtre;

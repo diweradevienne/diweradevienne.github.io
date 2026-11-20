@@ -238,6 +238,15 @@ nav.filtres button[aria-pressed="true"]{background:linear-gradient(135deg,#f6c95
 .medit .gratuit{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--or)}
 .medit h3{font-size:21px;line-height:1.2;margin:6px 0 0}
 
+/* Après un abus sexuel */
+.abus{padding-top:110px}
+.abus h2{font-size:clamp(36px,5vw,56px);margin:10px 0 12px}
+.abus-intro{color:var(--doux);max-width:760px;margin:0 0 14px}
+.abus-aide{max-width:760px;margin:0 0 30px;padding:14px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--trait);color:var(--doux);font-size:15.5px}
+.abus-aide b{color:var(--encre);font-weight:500}
+.abus-titre{font-size:28px;margin:10px 0 18px}
+.abus .grille{margin-bottom:40px}
+
 /* Comment ça marche */
 .etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
 @media (max-width:760px){.etapes{grid-template-columns:1fr}}
@@ -296,7 +305,7 @@ footer .prisme{margin:18px 0}
   <div class="page">
     <div class="barre">
       <a class="marque script" style="font-size:clamp(26px,3.4vw,34px)" href="#">L'Atelier fait d'Étoiles</a>
-      <nav class="liens" aria-label="Menu"><a href="#soins">Les séances</a><a href="#meditations">Méditations offertes</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
+      <nav class="liens" aria-label="Menu"><a href="#soins">Les séances</a><a href="#abus">Après un abus sexuel</a><a href="#meditations">Méditations offertes</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
     </div>
     <div class="ouverture-grille">
       <div>
@@ -358,6 +367,20 @@ footer .prisme{margin:18px 0}
   <div class="recherche"><input type="search" id="recherche" placeholder="Rechercher une séance : karma, confiance, protection…" aria-label="Rechercher une séance"></div>
   <p class="rien" id="rien" hidden>Pour ce mot, essayez plutôt « karma », « blessure » ou « protection »… ou écrivez-moi : je vous guide avec plaisir.</p>
   <div class="grille" id="grille"></div>
+
+  <section id="abus" class="abus">
+    <div class="sur-titre">Un espace à part, avec douceur</div>
+    <h2>Si vous avez vécu un abus sexuel</h2>
+    <p class="abus-intro">Vous êtes ici dans un espace protégé. Toutes les séances qui accompagnent la libération des blessures laissées par un abus sexuel
+      sont réunies ci-dessous, pour que vous puissiez avancer pas à pas, à votre rythme, avec bienveillance.
+      Votre ressenti vous guide : choisissez ce qui résonne en vous.</p>
+    <p class="abus-aide">Vous méritez d'être entendue et entendu. Si vous en ressentez le besoin, une écoute gratuite et anonyme existe, tous les jours :
+      <b>France Victimes, 116 006</b>. Votre médecin reste aussi votre premier allié.</p>
+    <h3 class="abus-titre">Les programmes complets</h3>
+    <div class="grille" id="grilleAbusProg"></div>
+    <h3 class="abus-titre">Les séances à l'unité</h3>
+    <div class="grille" id="grilleAbus"></div>
+  </section>
 
   <section id="meditations" class="meditations">
     <div class="sur-titre">Mes cadeaux</div>
@@ -576,6 +599,8 @@ $("#prixIntegrale").textContent = euros(VEDETTE.prix);
 // filtres
 const PROGRAMMES = SOINS.filter(s => !s.vedette && s.cat === "Programmes");
 const AUTRES = SOINS.filter(s => !s.vedette && s.cat !== "Programmes");
+const ABUS_PROG = ["pack1", "programme2", "programme"];
+const ABUS = ["ame-abus", "salie", "humiliation", "injustice", "intrusion", "trahison", "devalorisation", "confiance", "integrite", "illegitimite", "cristal"];
 const familles = ["Tous", ...new Set(AUTRES.map(s => s.cat))];
 let filtre = "Tous";
 $("#filtres").innerHTML = familles.map(f => `<button type="button" aria-pressed="${f===filtre}" data-f="${f}">${f}</button>`).join("");
@@ -651,6 +676,8 @@ function afficher(){
   $("#titreListe").textContent = filtre === "Tous" ? "Toutes les séances" : filtre;
   $("#rien").hidden = liste.length > 0;
   $("#grille").innerHTML = liste.map(carteSoin).join("");
+  $("#grilleAbusProg").innerHTML = ABUS_PROG.map(soinPar).filter(Boolean).map(carteSoin).join("");
+  $("#grilleAbus").innerHTML = ABUS.map(soinPar).filter(Boolean).map(carteSoin).join("");
   $("#nbPanier").textContent = panier.length;
 }
 document.addEventListener("click", e => {

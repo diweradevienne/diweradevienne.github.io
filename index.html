@@ -314,6 +314,19 @@ input:focus{outline:2px solid var(--or-clair);border-color:var(--or)}
 .encadre b{font-weight:500}
 .ref{font-family:Cormorant,serif;font-size:30px;letter-spacing:.06em;color:var(--or);margin:0 0 6px}
 .rib{max-width:100%;border-radius:10px;margin-top:8px}
+.carte-proche{position:relative;overflow:hidden;margin:16px 0;padding:22px 20px 18px;border-radius:18px;text-align:center;color:#fff;
+  background:radial-gradient(circle at 20% 0%,rgba(251,104,255,.35),transparent 55%),radial-gradient(circle at 90% 100%,rgba(246,201,92,.3),transparent 50%),linear-gradient(160deg,#2b0a8a,#170055);
+  box-shadow:0 14px 30px -12px rgba(251,104,255,.55),inset 0 0 0 1px rgba(255,255,255,.12);animation:carteArrive .5s ease-out}
+.carte-proche::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
+.carte-proche .carte-titre{font:600 23px/1.3 Cormorant,Georgia,serif;margin:4px 0 10px;background:linear-gradient(90deg,#f6c95c,#fb68ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.carte-proche p{margin:0 0 16px;font-size:15px;line-height:1.6;color:#efe8ff}
+.carte-proche p b{color:#fff}
+.carte-proche .btn{display:inline-block;text-decoration:none;padding:13px 26px;border-radius:30px}
+.carte-proche small{display:block;margin-top:8px;color:#cfc3f5;font-size:12.5px}
+.carte-proche .etoile{position:absolute;color:#f6c95c;animation:scintille 2.4s ease-in-out infinite;pointer-events:none}
+.carte-proche .e1{top:16px;left:18px;font-size:16px}.carte-proche .e2{top:40px;right:22px;font-size:13px;animation-delay:.8s;color:#fff}.carte-proche .e3{bottom:18px;left:30px;font-size:11px;animation-delay:1.5s}
+@keyframes scintille{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+@keyframes carteArrive{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
 .attention{background:#fff1c9;color:#5a4400;border-radius:10px;padding:10px 14px;font-size:14px;margin-top:10px}
 .paypal{background:#0b3a8a;border-color:#0b3a8a;color:#fff;margin:10px 0 6px}
 textarea{width:100%;height:120px;margin-top:8px;font:13px/1.45 ui-monospace,Menlo,monospace;border-radius:10px;border:1px solid var(--trait);background:var(--surface);color:var(--encre);padding:10px}
@@ -869,7 +882,7 @@ function vuePaiement(prenom, mail, extra = {}){
       .then(r => r.json())
       .then(r => { $("#etatEnvoi").innerHTML = r.ok
         ? `<b>1 — Commande reçue ✓</b><br>Un e-mail de confirmation vient de partir vers <b>${mail.replace(/</g, "&lt;")}</b> (pensez à regarder dans les indésirables).`
-        : r.raison === "proche" ? `<b>1 — Commande non enregistrée, merci de ne pas la payer</b><br>${MSG_PROCHE("cette séance")}`
+        : r.raison === "proche" ? `<b>1 — Commande non enregistrée, merci de ne pas la payer</b>${CARTE_PROCHE("cette séance")}`
         : secours; })
       .catch(() => { $("#etatEnvoi").innerHTML = secours; });
   }
@@ -910,12 +923,14 @@ const mailProche = titres => { const nom = ($("#prenom") || {}).value || "", mai
   return "mailto:" + REGLAGES.email + "?subject=" + encodeURIComponent("Tarif proche 33 € : " + titres.replace(/[«»]/g, "").trim()) +
     "&body=" + encodeURIComponent("Bonjour Diwéra,\n\nJ'ai déjà acheté " + titres + " et je souhaite l'offrir à un proche au tarif de " + PRIX_PROCHE + " €.\n\n" +
     "Mon nom : " + nom + "\nL'adresse e-mail utilisée pour ma commande : " + mail + "\nLà où je l'ai achetée (votre boutique, Kneo, ancien site…) et environ quand : \n\nMerci !"); };
-const MSG_PROCHE = titres => `Je ne vois pas encore dans l'historique de mes ventes l'achat de ${titres} avec cette adresse e-mail.
-  Si vous avez déjà acheté cette séance et que vous souhaitez l'offrir à un proche à ${euros(PRIX_PROCHE)}, contactez-moi :
-  <a href="${mailProche(titres)}" style="color:inherit;font-weight:600">${REGLAGES.email}</a>`;
+const MSG_PROCHE = titres => `Je ne vois pas encore dans l'historique de mes ventes l'achat de <b>${titres}</b> avec cette adresse e-mail.
+  Si vous avez déjà acheté cette séance et que vous souhaitez l'offrir à un proche à ${euros(PRIX_PROCHE)}, contactez-moi : je m'en occupe avec plaisir.`;
+const CARTE_PROCHE = titres => `<div class="carte-proche"><span class="etoile e1">✦</span><span class="etoile e2">✧</span><span class="etoile e3">✦</span>
+  <div class="carte-titre">💛 Offrir cette séance à un proche</div><p>${MSG_PROCHE(titres)}</p>
+  <a class="btn" href="${mailProche(titres)}">✉️ Écrire à Diwéra</a><small>${REGLAGES.email}</small></div>`;
 function proposerProches(refuses){
   const zone = $("#msgProche"); if (!zone) return;
-  zone.innerHTML = `<div class="attention" style="margin:12px 0;text-align:left">${MSG_PROCHE(refuses.map(i => "« " + soinPar(i).titre + " »").join(", "))}</div>`;
+  zone.innerHTML = CARTE_PROCHE(refuses.map(i => "« " + soinPar(i).titre + " »").join(", "));
   zone.scrollIntoView({ block: "center", behavior: "smooth" });
 }
 dlg.addEventListener("submit", e => { e.preventDefault();

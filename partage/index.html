@@ -23,8 +23,10 @@ a.cible.fait{background:#e7f6ea;color:#1d7a3e}
 .vide{text-align:center;color:#6b5f86;margin:30px 14px}
 </style></head><body>
 <header><h1>✨ Partager ma vidéo du jour</h1><p>Mes vidéos YouTube des 4 derniers jours, prêtes à partager.</p></header>
-<div class="aide">Touche un groupe : <b>le texte et le lien sont copiés</b> et le groupe s'ouvre dans Facebook.
-Touche « Écrivez quelque chose… », <b>colle</b> (appui long, puis Coller), attends la vidéo, <b>Publier</b>, puis reviens ici pour le suivant.</div>
+<div class="aide"><b>Rien à coller.</b> Touche un bouton : Facebook s'ouvre avec <b>ta vidéo déjà dedans</b>.<br>
+• <b>Mon Facebook perso</b> : touche <b>Publier</b>.<br>
+• <b>Un groupe</b> : en haut, choisis <b>« Partager dans un groupe »</b>, touche le nom du groupe, puis <b>Publier</b>.<br>
+Puis reviens ici pour le suivant.</div>
 <div id="liste"><p class="vide">Chargement…</p></div>
 <script>
 const CIBLES = [
@@ -52,7 +54,7 @@ fetch("deja.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({}
   if (!d.videos.length) { L.innerHTML = '<p class="vide">Aucune vidéo sortie ces 4 derniers jours.</p>'; return; }
   L.innerHTML = d.videos.map(v => `<div class="video"><img loading="lazy" src="https://i.ytimg.com/vi/${e(v.id)}/hqdefault.jpg" alt="">
     <h2>${e(v.titre)}</h2><div class="date">Sortie le ${new Date(v.sortie).toLocaleString("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}</div>
-    ${CIBLES.map(([c, nom, url, ok]) => `<a class="cible${fait(v.id, c) ? " fait" : ""}" href="${url}" target="_blank" rel="noopener" data-v="${e(v.id)}" data-c="${c}">${fait(v.id, c) ? "✓ " : ""}${e(nom)}</a>`).join("")}</div>`).join("");
+    ${CIBLES.map(([c, nom, url, ok]) => `<a class="cible${fait(v.id, c) ? " fait" : ""}" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(v.lien)}" target="_blank" rel="noopener" data-v="${e(v.id)}" data-c="${c}">${fait(v.id, c) ? "✓ " : ""}${e(nom)}</a>`).join("")}</div>`).join("");
   L.addEventListener("click", ev => { const a = ev.target.closest("a.cible"); if (!a) return;
     const v = d.videos.find(x => x.id === a.dataset.v), c = CIBLES.find(x => x[0] === a.dataset.c);
     copier(texte(v, c[3]));

@@ -3,3 +3,6 @@ Allow: /
 Disallow: /mail/
 
 Sitemap: https://diweradevienne.github.io/sitemap.xml
+
+User-agent: *
+Disallow: /partage/

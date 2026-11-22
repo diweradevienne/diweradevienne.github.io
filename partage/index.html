@@ -1,0 +1,61 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Partager">
+<link rel="apple-touch-icon" href="icone-partage.png">
+<title>Partager ma vidéo du jour</title>
+<!-- Page de Diwéra pour son iPhone (23/11/2026) : ses vidéos YouTube des 4 derniers jours (mises à jour toutes les heures
+     par GitHub, Mac éteint), et un bouton par groupe : le texte est copié, le groupe s'ouvre dans l'app Facebook. -->
+<style>
+:root{--nuit:#200174;--rose:#fb68ff;--or:#f6c95c}
+body{margin:0;font:18px/1.5 -apple-system,Helvetica,Arial,sans-serif;background:#f7f3ff;color:#2a1f45;padding-bottom:40px}
+header{background:linear-gradient(160deg,#2b0a8a,#170055);color:#fff;padding:calc(env(safe-area-inset-top) + 18px) 18px 18px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
+h1{margin:0;font-size:24px} header p{margin:6px 0 0;color:#d9cff7;font-size:15px}
+.aide{background:#fff4d6;border-radius:14px;padding:12px 14px;margin:14px;font-size:16px}
+.video{background:#fff;border-radius:18px;margin:14px;padding:14px;box-shadow:0 2px 8px #0001}
+.video img{width:100%;border-radius:12px;display:block}
+.video h2{font-size:19px;margin:10px 0 2px;color:var(--nuit)} .date{font-size:14px;color:#6b5f86;margin-bottom:8px}
+a.cible{display:block;text-decoration:none;text-align:center;font-weight:600;font-size:18px;padding:15px;border-radius:30px;margin:9px 0;
+  color:#2a1a4a;background:linear-gradient(135deg,var(--or),var(--rose))}
+a.cible.fait{background:#e7f6ea;color:#1d7a3e}
+.vide{text-align:center;color:#6b5f86;margin:30px 14px}
+</style></head><body>
+<header><h1>✨ Partager ma vidéo du jour</h1><p>Mes vidéos YouTube des 4 derniers jours, prêtes à partager.</p></header>
+<div class="aide">Touche un groupe : <b>le texte et le lien sont copiés</b> et le groupe s'ouvre dans Facebook.
+Touche « Écrivez quelque chose… », <b>colle</b> (appui long, puis Coller), attends la vidéo, <b>Publier</b>, puis reviens ici pour le suivant.</div>
+<div id="liste"><p class="vide">Chargement…</p></div>
+<script>
+const CIBLES = [
+  ["perso", "Mon Facebook perso", "https://www.facebook.com/Devienne.Diwera/", true],
+  ["atelier", "L'Atelier fait d'Étoiles", "https://www.facebook.com/groups/188912021707289", true],
+  ["karma", "Karma et Dharma", "https://www.facebook.com/groups/1693788064708485", true],
+  ["rayons", "Les 12 Rayons sacrés", "https://www.facebook.com/groups/les12rayons", true],
+  ["anges", "Le Cœur des Anges (sans lien de vente)", "https://www.facebook.com/groups/1964630760416294", false],
+];
+const e = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fait = (v, c) => { try { return localStorage.getItem("partage:" + v + ":" + c) === "1"; } catch (x) { return false; } };
+function texte(v, liensOk) {
+  let d = (v.description || "").trim();
+  if (!liensOk) d = d.split("\n").filter(l => !/https?:\/\/|www\.|linktr/i.test(l)).join("\n");
+  return v.lien + " \n\n" + v.titre + (d ? "\n\n" + d : "");
+}
+function copier(t) {
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).catch(() => repli(t)); else repli(t);
+}
+function repli(t) { const z = document.createElement("textarea"); z.value = t; z.setAttribute("readonly", ""); z.style.position = "fixed"; z.style.opacity = "0";
+  document.body.appendChild(z); z.select(); z.setSelectionRange(0, t.length); try { document.execCommand("copy"); } catch (x) {} z.remove(); }
+fetch("videos.json?" + Date.now()).then(r => r.json()).then(d => {
+  const L = document.getElementById("liste");
+  if (!d.videos.length) { L.innerHTML = '<p class="vide">Aucune vidéo sortie ces 4 derniers jours.</p>'; return; }
+  L.innerHTML = d.videos.map(v => `<div class="video"><img loading="lazy" src="https://i.ytimg.com/vi/${e(v.id)}/hqdefault.jpg" alt="">
+    <h2>${e(v.titre)}</h2><div class="date">Sortie le ${new Date(v.sortie).toLocaleString("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}</div>
+    ${CIBLES.map(([c, nom, url, ok]) => `<a class="cible${fait(v.id, c) ? " fait" : ""}" href="${url}" target="_blank" rel="noopener" data-v="${e(v.id)}" data-c="${c}">${fait(v.id, c) ? "✓ " : ""}${e(nom)}</a>`).join("")}</div>`).join("");
+  L.addEventListener("click", ev => { const a = ev.target.closest("a.cible"); if (!a) return;
+    const v = d.videos.find(x => x.id === a.dataset.v), c = CIBLES.find(x => x[0] === a.dataset.c);
+    copier(texte(v, c[3]));
+    try { localStorage.setItem("partage:" + v.id + ":" + c[0], "1"); } catch (x) {}
+    a.classList.add("fait"); if (!a.textContent.startsWith("✓")) a.textContent = "✓ " + a.textContent; });
+}).catch(() => { document.getElementById("liste").innerHTML = '<p class="vide">Pas de connexion pour le moment.</p>'; });
+</script></body></html>

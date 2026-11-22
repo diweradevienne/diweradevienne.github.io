@@ -35,7 +35,8 @@ const CIBLES = [
   ["anges", "Le Cœur des Anges (sans lien de vente)", "https://www.facebook.com/groups/1964630760416294", false],
 ];
 const e = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const fait = (v, c) => { try { return localStorage.getItem("partage:" + v + ":" + c) === "1"; } catch (x) { return false; } };
+let DEJA = {};   // partages déjà faits par Claude (Mac allumé, 13 h et 20 h) : { idYouTube: ["perso", "atelier", …] }
+const fait = (v, c) => { if ((DEJA[v] || []).includes(c)) return true; try { return localStorage.getItem("partage:" + v + ":" + c) === "1"; } catch (x) { return false; } };
 function texte(v, liensOk) {
   let d = (v.description || "").trim();
   if (!liensOk) d = d.split("\n").filter(l => !/https?:\/\/|www\.|linktr/i.test(l)).join("\n");
@@ -46,7 +47,7 @@ function copier(t) {
 }
 function repli(t) { const z = document.createElement("textarea"); z.value = t; z.setAttribute("readonly", ""); z.style.position = "fixed"; z.style.opacity = "0";
   document.body.appendChild(z); z.select(); z.setSelectionRange(0, t.length); try { document.execCommand("copy"); } catch (x) {} z.remove(); }
-fetch("videos.json?" + Date.now()).then(r => r.json()).then(d => {
+fetch("deja.json?" + Date.now()).then(r => r.ok ? r.json() : {}).catch(() => ({})).then(x => { DEJA = x || {}; return fetch("videos.json?" + Date.now()); }).then(r => r.json()).then(d => {
   const L = document.getElementById("liste");
   if (!d.videos.length) { L.innerHTML = '<p class="vide">Aucune vidéo sortie ces 4 derniers jours.</p>'; return; }
   L.innerHTML = d.videos.map(v => `<div class="video"><img loading="lazy" src="https://i.ytimg.com/vi/${e(v.id)}/hqdefault.jpg" alt="">

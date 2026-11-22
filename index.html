@@ -828,8 +828,8 @@ function vuePanier(){
     <form id="formCommande">
       <label for="prenom">Votre prénom et votre nom</label><input type="text" id="prenom" required autocomplete="name" placeholder="ex. : Marie Dupont">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
-      <label for="tel">Votre téléphone (facultatif)</label><input type="tel" id="tel" autocomplete="tel">
-      <label for="adresse">Votre adresse postale (facultatif)</label><input type="text" id="adresse" autocomplete="street-address" placeholder="ex. : 12 rue des Lilas, 75000 Paris">
+      <label for="tel">Votre téléphone (facultatif, en cas de panne d'Internet)</label><input type="tel" id="tel" autocomplete="tel">
+      <label for="adresse">Votre adresse postale (facultative, en cas de panne d'Internet)</label><input type="text" id="adresse" autocomplete="street-address" placeholder="ex. : 12 rue des Lilas, 75000 Paris">
       ${panier.some(id => id.endsWith("@proche") && !panier.includes(id.split("@")[0])) ? `<label for="origine">Référence de votre commande précédente (DIW-…), si vous l'avez</label><input type="text" id="origine" autocomplete="off">` : ""}
       <div id="msgProche"></div>
       <input type="text" id="piege" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">

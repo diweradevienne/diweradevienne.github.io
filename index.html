@@ -370,7 +370,7 @@ footer .prisme{margin:18px 0}
     <p>Chaque personne qui vit sous le même toit, dans le même foyer, peut profiter de la séance en vidéo, sans rien payer de plus.</p>
     <p>Pour un proche qui vit ailleurs, même de votre famille, la séance lui est proposée à <b>33 €</b> au lieu du plein tarif, pour qu'il puisse en profiter lui aussi.
       Et si vous souhaitez la lui partager, choisissez simplement « Pour un proche · 33 € » sous la séance.</p>
-    <p>Ce tarif de 33 € est réservé aux personnes qui ont <b>déjà pris cette séance pour elles-mêmes</b>.</p>
+    <p>Ce tarif de 33 € est réservé aux personnes qui ont <b>déjà reçu cette séance pour elles-mêmes</b>. Commandez avec la même adresse e-mail que pour votre premier achat : la boutique le vérifie toute seule.</p>
     <p class="echange">Dans un nettoyage karmique, comme dans toute séance énergétique, l'échange fait partie du chemin : toute peine mérite salaire.
       C'est ce qui rend l'ensemble juste, pour vous comme pour moi.</p>
   </div>
@@ -777,8 +777,8 @@ document.addEventListener("click", e => {
   if (id.endsWith("@proche") && !panier.includes(id) && !panier.includes(id.split("@")[0])) {
     const s = soinPar(id);
     $("#contenuDlg").innerHTML = `<h2>Pour un proche</h2>
-      <p style="color:var(--doux)">Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont <b>déjà</b> la séance « ${s.titre} » pour elles-mêmes,
-        afin de la partager avec un proche qui vit ailleurs.</p>
+      <p style="color:var(--doux)">Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont <b>déjà reçu</b> la séance « ${s.titre} » pour elles-mêmes,
+        afin de la partager avec un proche qui vit ailleurs. Commandez avec la même adresse e-mail que pour votre premier achat : la boutique le vérifie toute seule.</p>
       <div class="actions" style="justify-content:flex-start">
         <button class="btn" data-id="${id}" data-choix="deja">Je l'ai déjà pour moi, je l'offre à un proche (${euros(PRIX_PROCHE)})</button>
         <button class="btn clair" data-id="${id}" data-choix="les-deux">Je la prends pour moi et je l'offre à un proche (${euros(s.prix)} + ${euros(PRIX_PROCHE)})</button>
@@ -828,7 +828,7 @@ function vuePanier(){
     <form id="formCommande">
       <label for="prenom">Votre prénom et votre nom</label><input type="text" id="prenom" required autocomplete="name" placeholder="ex. : Marie Dupont">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
-      ${panier.some(id => id.endsWith("@proche") && !panier.includes(id.split("@")[0])) ? `<label for="origine">Référence de votre commande précédente (DIW-…), si vous l'avez</label><input type="text" id="origine" autocomplete="off">` : ""}
+      <div id="msgProche"></div>
       <input type="text" id="piege" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
       <label class="case"><input type="checkbox" required> J'accepte les conditions de vente et je souhaite recevoir ma séance dès le paiement reçu ; je renonce ainsi au délai de rétractation de 14 jours.</label>
       <div class="actions"><button type="button" class="lien" data-a="fermer">Continuer mes achats</button><button class="btn" type="submit">Je commande</button></div>
@@ -859,13 +859,14 @@ function vuePaiement(prenom, mail, extra = {}){
   if (REGLAGES.commande) {
     const donnees = { ref, prenom, mail, piege: extra.piege || "",
       lignes: panier.map(id => ({ id: id.split("@")[0], titre: titrePanier(id), prix: prixPanier(id),
-        proche: id.endsWith("@proche"), origine: extra.origine || "" })) };
+        proche: id.endsWith("@proche"), contenu: contenuDe(id) })) };
     const secours = `<b>1 — Votre commande</b><br><span style="color:var(--doux)">L'envoi automatique n'a pas abouti. Envoyez-la en un clic :</span><br>
       <a class="btn" style="margin-top:12px" href="${mailto}">Envoyer ma commande par e-mail</a>`;
     fetch(REGLAGES.commande, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(donnees) })
       .then(r => r.json())
       .then(r => { $("#etatEnvoi").innerHTML = r.ok
         ? `<b>1 — Commande reçue ✓</b><br>Un e-mail de confirmation vient de partir vers <b>${mail.replace(/</g, "&lt;")}</b> (pensez à regarder dans les indésirables).`
+        : r.raison === "proche" ? `<b>1 — Commande non enregistrée</b><br>Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont déjà reçu cette séance, avec cette même adresse e-mail. Merci de ne pas payer cette commande : revenez à la boutique pour la refaire.`
         : secours; })
       .catch(() => { $("#etatEnvoi").innerHTML = secours; });
   }
@@ -897,8 +898,37 @@ function appliquerCode(){
   if ($("#prenom")) $("#prenom").value = garde.prenom; if ($("#mail")) $("#mail").value = garde.mail;
 }
 dlg.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "code") { e.preventDefault(); appliquerCode(); } });
-dlg.addEventListener("submit", e => { e.preventDefault(); vuePaiement($("#prenom").value.trim(), $("#mail").value.trim(),
-  { origine: ($("#origine") || {}).value || "", piege: ($("#piege") || {}).value || "" }); });
+// Tarif proche (33 €) : la boutique vérifie toute seule, avant le paiement, que la personne a déjà reçu la séance
+// (même adresse e-mail, plein tarif, code promo ou pack) ou qu'elle la prend pour elle dans cette commande.
+const contenuDe = id => { if (id.endsWith("@proche")) return []; const s = soinPar(id);
+  return s.contenu || (s.id === "integrale" ? SOINS.filter(x => x.cat !== "Programmes").map(x => x.id) : []); };
+function proposerProches(refuses){
+  const zone = $("#msgProche"); if (!zone) return;
+  zone.innerHTML = `<div class="attention" style="margin:12px 0;text-align:left">Le tarif de ${euros(PRIX_PROCHE)} est réservé aux personnes qui ont <b>déjà reçu</b> la séance pour elles-mêmes.
+    Nous ne la trouvons pas encore à cette adresse e-mail pour :<br>` +
+    refuses.map(i => { const s = soinPar(i); return `<div style="margin:10px 0 0"><b>${s.titre}</b><br>
+      <button type="button" class="btn" data-pour-moi="${i}" style="margin-top:6px">Je la prends pour moi aussi (+ ${euros(s.prix)})</button>
+      <button type="button" class="lien" data-retirer="${i}@proche">retirer</button></div>`; }).join("") +
+    `<div style="margin-top:10px">Si vous l'avez achetée avec une autre adresse e-mail, utilisez celle-là.</div></div>`;
+  zone.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+dlg.addEventListener("click", e => { const b = e.target.closest("[data-pour-moi]"); if (!b) return;
+  const g = { prenom: ($("#prenom") || {}).value || "", mail: ($("#mail") || {}).value || "" };
+  if (!panier.includes(b.dataset.pourMoi)) panier.push(b.dataset.pourMoi); sauver(); afficher(); vuePanier();
+  if ($("#prenom")) $("#prenom").value = g.prenom; if ($("#mail")) $("#mail").value = g.mail; });
+dlg.addEventListener("submit", e => { e.preventDefault();
+  const prenom = $("#prenom").value.trim(), mail = $("#mail").value.trim(), piege = ($("#piege") || {}).value || "";
+  const go = () => vuePaiement(prenom, mail, { piege });
+  if (!REGLAGES.commande || !panier.some(id => id.endsWith("@proche"))) return go();
+  const bouton = e.target.querySelector("button[type=submit]"); bouton.disabled = true; bouton.textContent = "Vérification…";
+  fetch(REGLAGES.commande, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ verifier: true, mail, lignes: panier.map(id => ({ id: id.split("@")[0], proche: id.endsWith("@proche"), contenu: contenuDe(id) })) }) })
+    .then(r => r.json())
+    .then(r => { bouton.disabled = false; bouton.textContent = "Je commande";
+      if (r.ok && r.refuses && r.refuses.length) return proposerProches(r.refuses);
+      go(); })
+    .catch(() => { bouton.disabled = false; bouton.textContent = "Je commande"; go(); });
+});
 
 // mentions
 const m = REGLAGES;

@@ -906,9 +906,13 @@ dlg.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === 
 // (même adresse e-mail, plein tarif, code promo ou pack) ou qu'elle la prend pour elle dans cette commande.
 const contenuDe = id => { if (id.endsWith("@proche")) return []; const s = soinPar(id);
   return s.contenu || (s.id === "integrale" ? SOINS.filter(x => x.cat !== "Programmes").map(x => x.id) : []); };
+const mailProche = titres => { const nom = ($("#prenom") || {}).value || "", mail = ($("#mail") || {}).value || "";
+  return "mailto:" + REGLAGES.email + "?subject=" + encodeURIComponent("Tarif proche 33 € : " + titres.replace(/[«»]/g, "").trim()) +
+    "&body=" + encodeURIComponent("Bonjour Diwéra,\n\nJ'ai déjà acheté " + titres + " et je souhaite l'offrir à un proche au tarif de " + PRIX_PROCHE + " €.\n\n" +
+    "Mon nom : " + nom + "\nL'adresse e-mail utilisée pour ma commande : " + mail + "\nLà où je l'ai achetée (votre boutique, Kneo, ancien site…) et environ quand : \n\nMerci !"); };
 const MSG_PROCHE = titres => `Je ne vois pas encore dans l'historique de mes ventes l'achat de ${titres} avec cette adresse e-mail.
   Si vous avez déjà acheté cette séance et que vous souhaitez l'offrir à un proche à ${euros(PRIX_PROCHE)}, contactez-moi :
-  <a href="mailto:${REGLAGES.email}" style="color:inherit;font-weight:600">${REGLAGES.email}</a>`;
+  <a href="${mailProche(titres)}" style="color:inherit;font-weight:600">${REGLAGES.email}</a>`;
 function proposerProches(refuses){
   const zone = $("#msgProche"); if (!zone) return;
   zone.innerHTML = `<div class="attention" style="margin:12px 0;text-align:left">${MSG_PROCHE(refuses.map(i => "« " + soinPar(i).titre + " »").join(", "))}</div>`;

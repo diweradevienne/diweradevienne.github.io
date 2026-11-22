@@ -675,18 +675,18 @@ const sauver = () => { try { localStorage.setItem("panier-diwera", JSON.stringif
 // étoiles comme le générique de début : un ciel pailleté, plus dense en haut
 const sc = $("#scintilles");
 const haut = () => Math.pow(Math.random(), 1.6) * 92;   // plus d'étoiles vers le haut
-for (let i = 0; i < 90; i++) {            // petites paillettes
+for (let i = 0; i < 150; i++) {           // petites paillettes (plus nombreuses, 23/11)
   const e = document.createElement("span"); e.className = "point";
   e.style.left = (Math.random()*100) + "%"; e.style.top = haut() + "%";
   const d = 1.5 + Math.random()*2.5; e.style.width = e.style.height = d + "px";
   e.style.animationDelay = (Math.random()*2.6) + "s"; e.style.animationDuration = (1.8 + Math.random()*2.2) + "s";
   sc.appendChild(e);
 }
-for (let i = 0; i < 60; i++) {            // étoiles en croix qui scintillent
+for (let i = 0; i < 110; i++) {           // étoiles en croix qui scintillent (plus nombreuses, 23/11)
   const e = document.createElement("span"); e.className = "scintille" + (i % 3 === 0 ? " blanche" : "");
   e.innerHTML = "<i></i>";
   e.style.left = (Math.random()*100) + "%"; e.style.top = haut() + "%";
-  const grande = i % 9 === 0; const d = grande ? 30 + Math.random()*16 : 8 + Math.random()*14;
+  const grande = i % 7 === 0; const d = grande ? 30 + Math.random()*16 : 8 + Math.random()*14;
   e.style.width = e.style.height = d + "px";
   e.style.animationDelay = (Math.random()*3) + "s"; e.style.animationDuration = (2 + Math.random()*2.5) + "s";
   sc.appendChild(e);

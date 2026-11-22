@@ -304,7 +304,7 @@ dialog::backdrop{background:rgba(22,15,58,.45);backdrop-filter:blur(3px)}
 .ligne button{border:0;background:none;color:var(--orchidee);cursor:pointer;font:inherit;font-size:13px}
 .total{display:flex;justify-content:space-between;font-family:Cormorant,serif;font-size:26px;margin:16px 0}
 label{display:block;font-size:14px;letter-spacing:.04em;margin-top:14px;color:var(--doux)}
-input[type=text],input[type=email]{width:100%;font:400 16px Jost,sans-serif;padding:13px 16px;border:1px solid var(--trait);border-radius:12px;background:var(--fond);color:var(--encre);margin-top:6px}
+input[type=text],input[type=email],input[type=tel]{width:100%;font:400 16px Jost,sans-serif;padding:13px 16px;border:1px solid var(--trait);border-radius:12px;background:var(--fond);color:var(--encre);margin-top:6px}
 input:focus{outline:2px solid var(--or-clair);border-color:var(--or)}
 .case{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;letter-spacing:0}
 .case input{margin-top:4px;accent-color:var(--encre)}
@@ -828,6 +828,8 @@ function vuePanier(){
     <form id="formCommande">
       <label for="prenom">Votre prénom et votre nom</label><input type="text" id="prenom" required autocomplete="name" placeholder="ex. : Marie Dupont">
       <label for="mail">Votre e-mail, pour recevoir la séance</label><input type="email" id="mail" required autocomplete="email">
+      <label for="tel">Votre téléphone (facultatif)</label><input type="tel" id="tel" autocomplete="tel">
+      <label for="adresse">Votre adresse postale (facultatif)</label><input type="text" id="adresse" autocomplete="street-address" placeholder="ex. : 12 rue des Lilas, 75000 Paris">
       ${panier.some(id => id.endsWith("@proche") && !panier.includes(id.split("@")[0])) ? `<label for="origine">Référence de votre commande précédente (DIW-…), si vous l'avez</label><input type="text" id="origine" autocomplete="off">` : ""}
       <div id="msgProche"></div>
       <input type="text" id="piege" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
@@ -858,7 +860,7 @@ function vuePaiement(prenom, mail, extra = {}){
     <div class="encadre"><b>3 — Recevez votre séance</b><br>Dès le paiement reçu, votre séance arrive par e-mail, en général sous 48 h.</div>
     <div class="actions"><button class="btn" data-a="fini">Revenir à la boutique</button></div>`;
   if (REGLAGES.commande) {
-    const donnees = { ref, prenom, mail, piege: extra.piege || "",
+    const donnees = { ref, prenom, mail, tel: extra.tel || "", adresse: extra.adresse || "", piege: extra.piege || "",
       lignes: panier.map(id => ({ id: id.split("@")[0], titre: titrePanier(id), prix: prixPanier(id),
         proche: id.endsWith("@proche"), origine: extra.origine || "", contenu: contenuDe(id) })) };
     const secours = `<b>1 — Votre commande</b><br><span style="color:var(--doux)">L'envoi automatique n'a pas abouti. Envoyez-la en un clic :</span><br>
@@ -889,7 +891,7 @@ dlg.addEventListener("click", e => {
 });
 function appliquerCode(){
   const nom = ($("#code").value || "").trim().toUpperCase().replace(/\s+/g, "");
-  const garde = { prenom: ($("#prenom") || {}).value || "", mail: ($("#mail") || {}).value || "" };
+  const garde = { prenom: ($("#prenom") || {}).value || "", mail: ($("#mail") || {}).value || "", tel: ($("#tel") || {}).value || "", adresse: ($("#adresse") || {}).value || "" };
   const c = codeValide(nom);
   if (!nom) { codePromo = ""; messageCode = ""; }
   else if (!c) { codePromo = ""; messageCode = "Ce code n'est pas valable en ce moment."; }
@@ -897,6 +899,7 @@ function appliquerCode(){
   else { codePromo = nom; messageCode = "Code " + nom + " appliqué ✓"; }
   vuePanier();
   if ($("#prenom")) $("#prenom").value = garde.prenom; if ($("#mail")) $("#mail").value = garde.mail;
+  if ($("#tel")) $("#tel").value = garde.tel; if ($("#adresse")) $("#adresse").value = garde.adresse;
 }
 dlg.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "code") { e.preventDefault(); appliquerCode(); } });
 // Tarif proche (33 €) : la boutique vérifie toute seule, avant le paiement, que la personne a déjà reçu la séance
@@ -913,7 +916,8 @@ function proposerProches(refuses){
 }
 dlg.addEventListener("submit", e => { e.preventDefault();
   const prenom = $("#prenom").value.trim(), mail = $("#mail").value.trim(), piege = ($("#piege") || {}).value || "";
-  const go = () => vuePaiement(prenom, mail, { piege, origine: ($("#origine") || {}).value || "" });
+  const go = () => vuePaiement(prenom, mail, { piege, origine: ($("#origine") || {}).value || "",
+    tel: (($("#tel") || {}).value || "").trim(), adresse: (($("#adresse") || {}).value || "").trim() });
   if (!REGLAGES.commande || !panier.some(id => id.endsWith("@proche"))) return go();
   const bouton = e.target.querySelector("button[type=submit]"); bouton.disabled = true; bouton.textContent = "Vérification…";
   fetch(REGLAGES.commande, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },

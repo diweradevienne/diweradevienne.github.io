@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /mail/
 Disallow: /partage/
+Disallow: /espace/
 
 Sitemap: https://diweradevienne.github.io/sitemap.xml

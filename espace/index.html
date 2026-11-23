@@ -30,22 +30,28 @@ a{color:inherit}
 .ciel::before{content:"";position:absolute;top:-260px;right:-160px;width:620px;height:620px;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(255,250,215,.95) 0%,rgba(255,232,160,.5) 26%,rgba(255,255,255,0) 62%)}
 .ciel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--prisme)}
-.ciel .page{position:relative;padding-top:22px;padding-bottom:44px}
+.ciel .page{position:relative;z-index:1;padding-top:22px;padding-bottom:44px}
 .script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
 .marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
 .ciel h1{font-size:clamp(44px,8vw,72px);margin:22px 0 6px}
 .ciel p{margin:0;color:#1d1160;font-size:17px}
 .retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
-.etoile{position:absolute;pointer-events:none;width:14px;height:14px;animation:scintille 3s ease-in-out infinite}
-.etoile::before,.etoile::after{content:"";position:absolute;left:50%;top:50%;background:#fff;border-radius:2px;transform:translate(-50%,-50%)}
-.etoile::before{width:2px;height:100%}.etoile::after{width:100%;height:2px}
-.etoile.or::before,.etoile.or::after{background:#f6d27a}
-@keyframes scintille{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
-@media (prefers-reduced-motion:reduce){.etoile{animation:none;opacity:.7}}
+/* L'arc-en-ciel derrière le titre */
+.arc-ciel{position:absolute;left:50%;top:70px;width:760px;height:760px;margin-left:-380px;border-radius:50%;pointer-events:none;opacity:.75;
+  background:radial-gradient(circle,transparent 50%,rgba(232,96,111,.8) 51%,rgba(242,160,61,.8) 53%,rgba(230,195,55,.8) 55%,rgba(95,191,122,.75) 57%,rgba(78,163,221,.75) 59%,rgba(138,111,214,.75) 61%,transparent 62.5%);
+  -webkit-mask:linear-gradient(180deg,#000 0%,#000 30%,transparent 48%);mask:linear-gradient(180deg,#000 0%,#000 30%,transparent 48%);filter:blur(1.5px)}
+@media (max-width:640px){.arc-ciel{width:560px;height:560px;margin-left:-280px;top:90px}}
+/* De vraies étoiles à 5 branches, de toutes les couleurs, qui scintillent */
+.etoile{position:absolute;pointer-events:none;opacity:0;z-index:0;animation:scintille 3.2s ease-in-out infinite}
+.etoile svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 1px 1px rgba(32,1,116,.25))}
+@keyframes scintille{0%,100%{opacity:0;transform:scale(.4) rotate(0deg)}45%{opacity:1;transform:scale(1.1) rotate(20deg)}60%{opacity:.9;transform:scale(1) rotate(28deg)}}
+@media (prefers-reduced-motion:reduce){.etoile{animation:none;opacity:.9}}
+.titre-arc{background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 10px rgba(255,255,255,.9))}
 
 /* Cartes */
-.carte{background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:30px 26px;margin:40px auto;max-width:520px;
+.carte{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:34px 26px 30px;margin:40px auto;max-width:520px;
   box-shadow:0 30px 70px -30px rgba(0,0,0,.5)}
+.carte::before,.seance::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
 .carte h2{font-size:30px;margin-bottom:8px}
 .carte p{color:var(--doux);margin:0 0 18px}
 label{display:block;font-size:14px;letter-spacing:.04em;color:var(--doux);margin:0 0 6px}
@@ -65,7 +71,7 @@ input.code{letter-spacing:.5em;text-align:center;font-size:26px}
 .haut-liste h2{font-size:clamp(30px,4vw,40px)}
 .haut-liste small{color:var(--doux);font-size:15px}
 .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;margin-bottom:60px}
-.seance{background:var(--surface);border:1px solid var(--trait);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.seance{position:relative;background:var(--surface);border:1px solid var(--trait);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
 .seance img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
 .seance .corps{padding:18px 18px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
 .seance h3{font-size:22px}
@@ -78,9 +84,10 @@ input.code{letter-spacing:.5em;text-align:center;font-size:26px}
 <body>
 
 <header class="ciel" id="ciel">
+  <div class="arc-ciel" aria-hidden="true"></div>
   <div class="page">
     <a class="marque script" href="../">L'Atelier fait d'Étoiles</a>
-    <h1 class="script">Mon espace</h1>
+    <h1 class="script titre-arc">Mon espace</h1>
     <p>Toutes les séances que vous avez reçues, réunies au même endroit.</p>
     <a class="retour" href="../">← Retour à la boutique</a>
   </div>
@@ -293,11 +300,13 @@ function afficher(seances, mail) {
 (async () => {
   // étoiles qui scintillent dans le ciel
   const ciel = $("#ciel");
-  for (let i = 0; i < 22; i++) {
+  const couleurs = ["#ff5c7a", "#ffa63d", "#ffe14d", "#5fdc8a", "#4fb6ff", "#9b7bff", "#ff6fd8", "#ffffff", "#ffd36e"];
+  for (let i = 0; i < 34; i++) {
+    const c = couleurs[i % couleurs.length], t = 12 + Math.random() * 16, d = Math.random() * 3.2, x = Math.random() * 100, y = 4 + Math.random() * 86;
     const e = document.createElement("span");
-    e.className = "etoile" + (i % 3 ? "" : " or");
-    const t = 6 + Math.random() * 12;
-    e.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 85}%;width:${t}px;height:${t}px;animation-delay:${Math.random() * 3}s`;
+    e.className = "etoile";
+    e.style.cssText = `left:${x}%;top:${y}%;width:${t}px;height:${t}px;--c:${c};animation-delay:${d}s;animation-duration:${2.6 + Math.random() * 1.6}s`;
+    e.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${c}" stroke="#fff" stroke-width="1.2" stroke-linejoin="round" d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 17.6l-6.4 3.6 1.4-7.2-5.3-5 7.2-.9z"/></svg>`;
     ciel.appendChild(e);
   }
   await chargerSoins();

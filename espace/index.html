@@ -34,7 +34,7 @@ a{color:inherit}
 .script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
 .marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
 .ciel h1{font-size:clamp(44px,8vw,72px);margin:22px 0 6px}
-.ciel p{margin:0;color:#1d1160;font-size:17px}
+.ciel p{margin:0;color:#fff;font-size:18px;font-weight:400;text-shadow:0 0 12px rgba(255,255,255,.95),0 0 3px rgba(255,236,170,.9),0 1px 8px rgba(32,1,116,.55)}
 .retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
 /* L'arc-en-ciel derrière le titre */
 .arc-ciel{position:absolute;left:50%;top:70px;width:760px;height:760px;margin-left:-380px;border-radius:50%;pointer-events:none;opacity:.75;
@@ -43,10 +43,12 @@ a{color:inherit}
 @media (max-width:640px){.arc-ciel{width:560px;height:560px;margin-left:-280px;top:90px}}
 /* De vraies étoiles à 5 branches, de toutes les couleurs, qui scintillent */
 .etoile{position:absolute;pointer-events:none;opacity:0;z-index:0;animation:scintille 3.2s ease-in-out infinite}
-.etoile svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 1px 1px rgba(32,1,116,.25))}
+.etoile svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 1.5px rgba(255,255,255,.9))}
 @keyframes scintille{0%,100%{opacity:0;transform:scale(.4) rotate(0deg)}45%{opacity:1;transform:scale(1.1) rotate(20deg)}60%{opacity:.9;transform:scale(1) rotate(28deg)}}
 @media (prefers-reduced-motion:reduce){.etoile{animation:none;opacity:.9}}
-.titre-arc{background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 10px rgba(255,255,255,.9))}
+.titre-arc{background:linear-gradient(90deg,#e8203f,#ff7a00,#f2c200,#1fae4b,#0a84e8,#5b3fd9,#c2189b);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;
+  -webkit-text-stroke:1px rgba(255,255,255,.85);filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 10px rgba(255,255,255,.95)) drop-shadow(0 3px 8px rgba(32,1,116,.35))}
+.ciel h1.titre-arc{font-size:clamp(56px,10vw,92px)}
 
 /* Cartes */
 .carte{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:34px 26px 30px;margin:40px auto;max-width:520px;
@@ -300,13 +302,16 @@ function afficher(seances, mail) {
 (async () => {
   // étoiles qui scintillent dans le ciel
   const ciel = $("#ciel");
+  // étoile fine et effilée : 5 pointes longues, cœur étroit
+  const ETOILE_FINE = (() => { let d = ""; for (let k = 0; k < 10; k++) { const r = k % 2 ? 3.2 : 12, a = -Math.PI / 2 + k * Math.PI / 5;
+    d += (k ? "L" : "M") + (12 + r * Math.cos(a)).toFixed(2) + " " + (12 + r * Math.sin(a)).toFixed(2); } return d + "Z"; })();
   const couleurs = ["#ff5c7a", "#ffa63d", "#ffe14d", "#5fdc8a", "#4fb6ff", "#9b7bff", "#ff6fd8", "#ffffff", "#ffd36e"];
-  for (let i = 0; i < 34; i++) {
-    const c = couleurs[i % couleurs.length], t = 12 + Math.random() * 16, d = Math.random() * 3.2, x = Math.random() * 100, y = 4 + Math.random() * 86;
+  for (let i = 0; i < 24; i++) {
+    const c = couleurs[i % couleurs.length], t = 7 + Math.random() * 9, d = Math.random() * 3.2, x = Math.random() * 100, y = 4 + Math.random() * 86;
     const e = document.createElement("span");
     e.className = "etoile";
     e.style.cssText = `left:${x}%;top:${y}%;width:${t}px;height:${t}px;--c:${c};animation-delay:${d}s;animation-duration:${2.6 + Math.random() * 1.6}s`;
-    e.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${c}" stroke="#fff" stroke-width="1.2" stroke-linejoin="round" d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 17.6l-6.4 3.6 1.4-7.2-5.3-5 7.2-.9z"/></svg>`;
+    e.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${c}" d="${ETOILE_FINE}"/></svg>`;
     ciel.appendChild(e);
   }
   await chargerSoins();

@@ -34,8 +34,24 @@ a{color:inherit}
 .script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
 .marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
 .ciel h1{font-size:clamp(44px,8vw,72px);margin:22px 0 6px}
-.ciel p{margin:0;color:#fff;font-size:18px;font-weight:400;text-shadow:0 0 12px rgba(255,255,255,.95),0 0 3px rgba(255,236,170,.9),0 1px 8px rgba(32,1,116,.55)}
+.ciel p{margin:0}
+.ciel .phrase{font-family:"Kaushan Script",cursive;font-size:clamp(22px,3.4vw,30px);line-height:1.25;color:#fff;text-shadow:0 1px 10px rgba(32,1,116,.5)}
 .retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
+.scintilles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+/* Étoiles comme le générique de début : croix fines dorées et blanches, un ciel pailleté */
+.scintille{position:absolute;opacity:0;animation:brille 3s ease-in-out infinite;transform:translate(-50%,-50%)}
+.scintille::before,.scintille::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%}
+.scintille::before{width:100%;height:9%;background:linear-gradient(90deg,transparent,rgba(255,240,170,.95) 40%,#fff 50%,rgba(255,240,170,.95) 60%,transparent)}
+.scintille::after{width:9%;height:100%;background:linear-gradient(180deg,transparent,rgba(255,240,170,.95) 40%,#fff 50%,rgba(255,240,170,.95) 60%,transparent)}
+.scintille i{position:absolute;left:50%;top:50%;width:22%;height:22%;transform:translate(-50%,-50%);border-radius:50%;background:#fffbe6;
+  box-shadow:0 0 6px 2px rgba(255,226,120,.95),0 0 14px 4px rgba(255,214,90,.45)}
+.scintille.blanche::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.95) 45%,#fff 50%,rgba(255,255,255,.95) 55%,transparent)}
+.scintille.blanche::after{background:linear-gradient(180deg,transparent,rgba(255,255,255,.95) 45%,#fff 50%,rgba(255,255,255,.95) 55%,transparent)}
+.scintille.blanche i{background:#fff;box-shadow:0 0 6px 2px rgba(255,255,255,.95)}
+.point{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff7d0;box-shadow:0 0 4px 1px rgba(255,230,140,.9);opacity:0;animation:brille-point 2.6s ease-in-out infinite}
+@keyframes brille{0%,100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}40%{opacity:1;transform:translate(-50%,-50%) scale(1)}60%{opacity:.85;transform:translate(-50%,-50%) scale(.75)}}
+@keyframes brille-point{0%,100%{opacity:.15}50%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.scintille,.point{animation:none;opacity:.7}}
 /* L'arc-en-ciel derrière le titre */
 .arc-ciel{position:absolute;left:50%;top:70px;width:760px;height:760px;margin-left:-380px;border-radius:50%;pointer-events:none;opacity:.75;
   background:radial-gradient(circle,transparent 50%,rgba(232,96,111,.8) 51%,rgba(242,160,61,.8) 53%,rgba(230,195,55,.8) 55%,rgba(95,191,122,.75) 57%,rgba(78,163,221,.75) 59%,rgba(138,111,214,.75) 61%,transparent 62.5%);
@@ -46,8 +62,7 @@ a{color:inherit}
 .etoile svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 1.5px rgba(255,255,255,.9))}
 @keyframes scintille{0%,100%{opacity:0;transform:scale(.4) rotate(0deg)}45%{opacity:1;transform:scale(1.1) rotate(20deg)}60%{opacity:.9;transform:scale(1) rotate(28deg)}}
 @media (prefers-reduced-motion:reduce){.etoile{animation:none;opacity:.9}}
-.titre-arc{background:linear-gradient(90deg,#e8203f,#ff7a00,#f2c200,#1fae4b,#0a84e8,#5b3fd9,#c2189b);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;
-  -webkit-text-stroke:1px rgba(255,255,255,.85);filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 10px rgba(255,255,255,.95)) drop-shadow(0 3px 8px rgba(32,1,116,.35))}
+.titre-arc{color:#200174;text-shadow:0 0 18px rgba(255,255,255,.95),0 0 4px #fff,0 0 2px #fff}
 .ciel h1.titre-arc{font-size:clamp(56px,10vw,92px)}
 
 /* Cartes */
@@ -87,10 +102,11 @@ input.code{letter-spacing:.5em;text-align:center;font-size:26px}
 
 <header class="ciel" id="ciel">
   <div class="arc-ciel" aria-hidden="true"></div>
+  <div class="scintilles" id="scintilles" aria-hidden="true"></div>
   <div class="page">
     <a class="marque script" href="../">L'Atelier fait d'Étoiles</a>
     <h1 class="script titre-arc">Mon espace</h1>
-    <p>Toutes les séances que vous avez reçues, réunies au même endroit.</p>
+    <p class="phrase">Toutes vos séances, réunies au même endroit</p>
     <a class="retour" href="../">← Retour à la boutique</a>
   </div>
 </header>
@@ -313,6 +329,24 @@ function afficher(seances, mail) {
     e.style.cssText = `left:${x}%;top:${y}%;width:${t}px;height:${t}px;--c:${c};animation-delay:${d}s;animation-duration:${2.6 + Math.random() * 1.6}s`;
     e.innerHTML = `<svg viewBox="0 0 24 24"><path fill="${c}" d="${ETOILE_FINE}"/></svg>`;
     ciel.appendChild(e);
+  }
+  // étoiles qui scintillent comme celles de la boutique (générique de début)
+  const sc = $("#scintilles"), haut = () => Math.pow(Math.random(), 1.4) * 95;
+  for (let i = 0; i < 70; i++) {
+    const e = document.createElement("span"); e.className = "point";
+    e.style.left = (Math.random() * 100) + "%"; e.style.top = haut() + "%";
+    const d = 1.5 + Math.random() * 2.5; e.style.width = e.style.height = d + "px";
+    e.style.animationDelay = (Math.random() * 2.6) + "s"; e.style.animationDuration = (1.8 + Math.random() * 2.2) + "s";
+    sc.appendChild(e);
+  }
+  for (let i = 0; i < 45; i++) {
+    const e = document.createElement("span"); e.className = "scintille" + (i % 3 === 0 ? " blanche" : "");
+    e.innerHTML = "<i></i>";
+    e.style.left = (Math.random() * 100) + "%"; e.style.top = haut() + "%";
+    const grande = i % 7 === 0, d = grande ? 26 + Math.random() * 14 : 8 + Math.random() * 12;
+    e.style.width = e.style.height = d + "px";
+    e.style.animationDelay = (Math.random() * 3) + "s"; e.style.animationDuration = (2 + Math.random() * 2.5) + "s";
+    sc.appendChild(e);
   }
   await chargerSoins();
   const s = lire();

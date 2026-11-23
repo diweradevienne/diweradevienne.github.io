@@ -29,14 +29,17 @@ a{color:inherit}
   background:radial-gradient(ellipse at 18% 8%,rgba(255,255,255,.5),transparent 45%),radial-gradient(ellipse at 88% 22%,rgba(255,240,200,.45),transparent 40%),linear-gradient(180deg,#4f97d6 0%,#7fbbe8 50%,#a7d5f4 100%)}
 .ciel::before{content:"";position:absolute;top:-260px;right:-160px;width:620px;height:620px;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(255,250,215,.95) 0%,rgba(255,232,160,.5) 26%,rgba(255,255,255,0) 62%)}
-.ciel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--prisme)}
+.ciel::after,.ciel .cadre-haut{content:"";position:absolute;left:0;right:0;height:6px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,#e8606f,#f2a03d,#e6c337,#5fbf7a,#4ea3dd,#8a6fd6,#d46fb8)}
+.ciel::after{bottom:0}.ciel .cadre-haut{top:0}
 .ciel .page{position:relative;z-index:1;padding-top:22px;padding-bottom:44px}
 .script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
 .marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
 .ciel h1{font-size:clamp(44px,8vw,72px);margin:2px 0 4px}
 .ciel p{margin:0}
 .ciel .phrase{font-family:"Kaushan Script",cursive;font-size:clamp(22px,3.4vw,30px);line-height:1.25;color:#fff;text-shadow:0 1px 10px rgba(32,1,116,.5)}
-.retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
+.retour{display:inline-block;margin-top:16px;font-size:14px;letter-spacing:.06em;color:#200174;text-decoration:none;background:rgba(255,255,255,.88);border-radius:99px;padding:7px 18px;box-shadow:0 4px 14px -6px rgba(32,1,116,.45)}
+.retour:hover{background:#fff}
 .scintilles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 /* Étoiles comme le générique de début : croix fines dorées et blanches, un ciel pailleté */
 .scintille{position:absolute;opacity:0;animation:brille 3s ease-in-out infinite;transform:translate(-50%,-50%)}
@@ -101,6 +104,7 @@ input.code{letter-spacing:.5em;text-align:center;font-size:26px}
 <body>
 
 <header class="ciel" id="ciel">
+  <div class="cadre-haut" aria-hidden="true"></div>
   <div class="arc-ciel" aria-hidden="true"></div>
   <div class="scintilles" id="scintilles" aria-hidden="true"></div>
   <div class="page">

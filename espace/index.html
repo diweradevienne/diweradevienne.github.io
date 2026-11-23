@@ -33,7 +33,7 @@ a{color:inherit}
 .ciel .page{position:relative;z-index:1;padding-top:22px;padding-bottom:44px}
 .script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
 .marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
-.ciel h1{font-size:clamp(44px,8vw,72px);margin:22px 0 6px}
+.ciel h1{font-size:clamp(44px,8vw,72px);margin:2px 0 4px}
 .ciel p{margin:0}
 .ciel .phrase{font-family:"Kaushan Script",cursive;font-size:clamp(22px,3.4vw,30px);line-height:1.25;color:#fff;text-shadow:0 1px 10px rgba(32,1,116,.5)}
 .retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
@@ -53,10 +53,10 @@ a{color:inherit}
 @keyframes brille-point{0%,100%{opacity:.15}50%{opacity:1}}
 @media (prefers-reduced-motion: reduce){.scintille,.point{animation:none;opacity:.7}}
 /* L'arc-en-ciel derrière le titre */
-.arc-ciel{position:absolute;left:50%;top:70px;width:760px;height:760px;margin-left:-380px;border-radius:50%;pointer-events:none;opacity:.75;
+.arc-ciel{position:absolute;left:50%;top:105px;width:760px;height:760px;margin-left:-380px;border-radius:50%;pointer-events:none;opacity:.75;
   background:radial-gradient(circle,transparent 50%,rgba(232,96,111,.8) 51%,rgba(242,160,61,.8) 53%,rgba(230,195,55,.8) 55%,rgba(95,191,122,.75) 57%,rgba(78,163,221,.75) 59%,rgba(138,111,214,.75) 61%,transparent 62.5%);
   -webkit-mask:linear-gradient(180deg,#000 0%,#000 30%,transparent 48%);mask:linear-gradient(180deg,#000 0%,#000 30%,transparent 48%);filter:blur(1.5px)}
-@media (max-width:640px){.arc-ciel{width:560px;height:560px;margin-left:-280px;top:90px}}
+@media (max-width:640px){.arc-ciel{width:560px;height:560px;margin-left:-280px;top:118px}}
 /* De vraies étoiles à 5 branches, de toutes les couleurs, qui scintillent */
 .etoile{position:absolute;pointer-events:none;opacity:0;z-index:0;animation:scintille 3.2s ease-in-out infinite}
 .etoile svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 1.5px rgba(255,255,255,.9))}

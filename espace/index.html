@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon espace · L'Atelier fait d'Étoiles</title>
+<meta name="description" content="Votre espace personnel : retrouvez toutes les séances en vidéo que vous avez achetées chez Diwéra Devienne.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#200174">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fond:#200174; --surface:#2a0c86; --encre:#fff8ec; --doux:#d9cff2; --trait:rgba(202,180,231,.28);
+  --or:#f2c96b; --orchidee:#fb68ff;
+  --prisme:linear-gradient(90deg,#f0a7a0,#f3c98b,#e9e19a,#a9d8b8,#9cc7ea,#b8a6e6,#e6a8d6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(760px 760px at 50% -240px,rgba(255,214,120,.45) 0%,rgba(251,104,255,.14) 38%,rgba(32,1,116,0) 70%) fixed,var(--fond);color:var(--encre);font:300 17px/1.7 Jost,system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3{font-family:Cormorant,Georgia,serif;font-weight:500;margin:0;line-height:1.1}
+a{color:inherit}
+.page{max-width:1000px;margin:0 auto;padding:0 16px}
+
+/* Entête : le ciel */
+.ciel{position:relative;overflow:hidden;text-align:center;color:#200174;
+  background:radial-gradient(ellipse at 18% 8%,rgba(255,255,255,.5),transparent 45%),radial-gradient(ellipse at 88% 22%,rgba(255,240,200,.45),transparent 40%),linear-gradient(180deg,#4f97d6 0%,#7fbbe8 50%,#a7d5f4 100%)}
+.ciel::before{content:"";position:absolute;top:-260px;right:-160px;width:620px;height:620px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,250,215,.95) 0%,rgba(255,232,160,.5) 26%,rgba(255,255,255,0) 62%)}
+.ciel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--prisme)}
+.ciel .page{position:relative;padding-top:22px;padding-bottom:44px}
+.script{font-family:"Kaushan Script",cursive;font-weight:400;color:#200174;text-shadow:0 0 18px rgba(255,255,255,.8),0 0 2px #fff}
+.marque{font-size:clamp(24px,3.4vw,32px);text-decoration:none}
+.ciel h1{font-size:clamp(44px,8vw,72px);margin:22px 0 6px}
+.ciel p{margin:0;color:#1d1160;font-size:17px}
+.retour{display:inline-block;margin-top:14px;font-size:14px;letter-spacing:.06em;color:#200174}
+.etoile{position:absolute;pointer-events:none;width:14px;height:14px;animation:scintille 3s ease-in-out infinite}
+.etoile::before,.etoile::after{content:"";position:absolute;left:50%;top:50%;background:#fff;border-radius:2px;transform:translate(-50%,-50%)}
+.etoile::before{width:2px;height:100%}.etoile::after{width:100%;height:2px}
+.etoile.or::before,.etoile.or::after{background:#f6d27a}
+@keyframes scintille{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.etoile{animation:none;opacity:.7}}
+
+/* Cartes */
+.carte{background:var(--surface);border:1px solid var(--trait);border-radius:22px;padding:30px 26px;margin:40px auto;max-width:520px;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.5)}
+.carte h2{font-size:30px;margin-bottom:8px}
+.carte p{color:var(--doux);margin:0 0 18px}
+label{display:block;font-size:14px;letter-spacing:.04em;color:var(--doux);margin:0 0 6px}
+input{width:100%;font:400 18px Jost,sans-serif;padding:14px 16px;border-radius:14px;border:1px solid var(--trait);background:#fffdf8;color:#200174}
+input:focus{outline:2px solid var(--or);outline-offset:2px}
+input.code{letter-spacing:.5em;text-align:center;font-size:26px}
+.btn{font:500 15px/1 Jost,sans-serif;letter-spacing:.06em;border:0;background:linear-gradient(135deg,#f6c95c,#fb68ff);color:#2a1a4a;
+  box-shadow:0 10px 24px -8px rgba(233,139,169,.6);border-radius:99px;padding:16px 28px;cursor:pointer;text-decoration:none;display:inline-block;margin-top:18px}
+.btn[disabled]{opacity:.6;cursor:wait}
+.lien{background:none;border:0;color:var(--or);font:400 15px Jost,sans-serif;cursor:pointer;text-decoration:underline;padding:0;margin-top:16px}
+.message{min-height:1.4em;margin-top:14px;font-size:15px;color:#ffd7f2}
+.message.ok{color:#c9f2d6}
+.cache{display:none}
+
+/* Mes séances */
+.haut-liste{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin:44px 0 22px}
+.haut-liste h2{font-size:clamp(30px,4vw,40px)}
+.haut-liste small{color:var(--doux);font-size:15px}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;margin-bottom:60px}
+.seance{background:var(--surface);border:1px solid var(--trait);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.seance img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.seance .corps{padding:18px 18px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.seance h3{font-size:22px}
+.seance .btn{margin-top:auto;text-align:center}
+.vide{text-align:center;color:var(--doux);max-width:560px;margin:10px auto 60px}
+.pied{text-align:center;font-size:13px;color:var(--doux);padding:0 16px 40px}
+.pied a{color:var(--or)}
+</style>
+</head>
+<body>
+
+<header class="ciel" id="ciel">
+  <div class="page">
+    <a class="marque script" href="../">L'Atelier fait d'Étoiles</a>
+    <h1 class="script">Mon espace</h1>
+    <p>Toutes les séances que vous avez reçues, réunies au même endroit.</p>
+    <a class="retour" href="../">← Retour à la boutique</a>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- 1. L'adresse e-mail -->
+  <section class="carte" id="etapeMail">
+    <h2>Me connecter</h2>
+    <p>Indiquez l'adresse e-mail utilisée pour vos achats. Vous recevrez un code de connexion par e-mail : pas de mot de passe à retenir.</p>
+    <form id="formMail">
+      <label for="mail">Votre adresse e-mail</label>
+      <input id="mail" type="email" autocomplete="email" required placeholder="prenom@exemple.fr">
+      <button class="btn" type="submit">Recevoir mon code</button>
+    </form>
+    <div class="message" id="msgMail" role="status"></div>
+  </section>
+
+  <!-- 2. Le code -->
+  <section class="carte cache" id="etapeCode">
+    <h2>Votre code</h2>
+    <p id="texteCode">Un code à 6 chiffres vient de partir vers votre boîte e-mail. Il est valable 15 minutes. Pensez à regarder dans les indésirables.</p>
+    <form id="formCode">
+      <label for="code">Code reçu par e-mail</label>
+      <input id="code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+      <button class="btn" type="submit">Entrer dans mon espace</button>
+    </form>
+    <div class="message" id="msgCode" role="status"></div>
+    <button class="lien" type="button" id="autreMail">Changer d'adresse ou renvoyer un code</button>
+  </section>
+
+  <!-- 3. Mes séances -->
+  <section class="cache" id="etapeSeances">
+    <div class="haut-liste">
+      <div><h2>Mes séances</h2><small id="quiEst"></small></div>
+      <button class="lien" type="button" id="deconnexion">Me déconnecter</button>
+    </div>
+    <div class="grille" id="grille"></div>
+    <p class="vide cache" id="vide">Aucune séance n'est encore enregistrée pour cette adresse.
+      Si vous venez de commander, votre séance apparaîtra ici dès que votre paiement aura été reçu.
+      Vous avez acheté avec une autre adresse e-mail ? Connectez-vous avec celle-ci.
+      Une question : <a href="mailto:diwera.devienne@gmail.com">diwera.devienne@gmail.com</a></p>
+
+    <!-- Ancienne adresse e-mail -->
+    <section class="carte" id="ancienne">
+      <h2>J'ai changé d'adresse e-mail</h2>
+      <p>Vous aviez acheté des séances avec une autre adresse ? Indiquez-la ici : vous recevrez un code dans cette ancienne boîte, et vos séances vous rejoindront dans cet espace.</p>
+      <form id="formAncien">
+        <label for="ancien">Mon ancienne adresse e-mail</label>
+        <input id="ancien" type="email" required placeholder="ancienne@exemple.fr">
+        <button class="btn" type="submit">Recevoir un code sur cette adresse</button>
+      </form>
+      <form id="formAncienCode" class="cache">
+        <label for="ancienCode" style="margin-top:18px">Code reçu sur mon ancienne adresse</label>
+        <input id="ancienCode" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        <button class="btn" type="submit">Retrouver mes séances</button>
+      </form>
+      <div class="message" id="msgAncien" role="status"></div>
+      <p style="margin:16px 0 0;font-size:15px">Vous n'avez plus accès à votre ancienne boîte ? Tapez-la ci-dessus, puis cliquez ci-dessous.
+        <strong>Pour la sécurité de chacune, Diwéra reçoit aussitôt un e-mail avec les deux adresses, et elle pourra vous contacter pour vérifier ensemble.</strong></p>
+      <button class="lien" type="button" id="sansAcces" style="margin-top:6px">Je n'ai plus accès à cette ancienne adresse</button>
+    </section>
+  </section>
+
+</main>
+
+<p class="pied">Vos séances sont personnelles : merci de ne pas partager leurs liens.<br>
+Ces séances ne remplacent jamais un avis ou un traitement médical. · <a href="mailto:diwera.devienne@gmail.com">Écrire à Diwéra</a></p>
+
+<script>
+// Adresse de l'outil « Commandes de ma boutique » (le même que la boutique)
+const OUTIL = "https://script.google.com/macros/s/AKfycbwsj7LEI_cnTlLgFFY6jWx990dqv2jbt_R24Q22y646fr0Sijl8nTLEqBzwBqO8vNU_dw/exec";
+const CLE = "espace-diwera";   // ce que le navigateur retient (jamais l'e-mail en clair chez Google)
+
+const $ = s => document.querySelector(s);
+const montrer = id => ["etapeMail", "etapeCode", "etapeSeances"].forEach(x => $("#" + x).classList.toggle("cache", x !== id));
+const lire = () => { try { return JSON.parse(localStorage.getItem(CLE) || "null"); } catch (e) { return null; } };
+const garder = v => { try { v ? localStorage.setItem(CLE, JSON.stringify(v)) : localStorage.removeItem(CLE); } catch (e) {} };
+const echapper = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// Les titres et images viennent de la boutique elle-même (une seule liste à tenir à jour)
+let SOINS = [];
+const image = (nom, l, h) => !nom ? "../icone-512.png" : nom.startsWith("seances/") ? "../" + nom
+  : `https://static.wixstatic.com/media/${nom}/v1/fill/w_${l},h_${h || l},al_c,q_85,enc_auto/${nom}`;
+async function chargerSoins() {
+  try {
+    const t = await (await fetch("../", { cache: "no-cache" })).text();
+    const m = t.match(/const SOINS = (\[[\s\S]*?\n\]);/);
+    if (m) SOINS = Function('"use strict";return ' + m[1])();
+  } catch (e) {}
+}
+const soinPar = id => SOINS.find(s => s.id === id);
+
+async function outil(donnees) {
+  const r = await fetch(OUTIL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(donnees) });
+  return r.json();
+}
+
+// 1. demander un code
+$("#formMail").addEventListener("submit", async e => {
+  e.preventDefault();
+  const mail = $("#mail").value.trim().toLowerCase();
+  const b = e.submitter || $("#formMail .btn"); b.disabled = true;
+  $("#msgMail").textContent = "Envoi du code…";
+  try {
+    const r = await outil({ espace: "code", mail });
+    if (r.ok) {
+      $("#msgMail").textContent = "";
+      $("#texteCode").textContent = `Un code à 6 chiffres vient de partir vers ${mail}. Il est valable 15 minutes. Pensez à regarder dans les indésirables.`;
+      montrer("etapeCode"); $("#code").value = ""; $("#code").focus();
+    } else {
+      $("#msgMail").textContent = r.raison === "trop" ? "Trop de demandes pour le moment : réessayez dans une heure." : "Le code n'a pas pu partir. Vérifiez votre adresse et réessayez.";
+    }
+  } catch (err) { $("#msgMail").textContent = "Connexion impossible pour le moment. Réessayez dans un instant."; }
+  b.disabled = false;
+});
+
+// 2. entrer avec le code
+$("#formCode").addEventListener("submit", async e => {
+  e.preventDefault();
+  const mail = $("#mail").value.trim().toLowerCase(), code = $("#code").value.trim();
+  const b = e.submitter || $("#formCode .btn"); b.disabled = true;
+  $("#msgCode").textContent = "Vérification…";
+  try {
+    const r = await outil({ espace: "entrer", mail, code });
+    if (r.ok) { garder({ jeton: r.jeton, mail }); afficher(r.seances || [], mail); $("#msgCode").textContent = ""; }
+    else $("#msgCode").textContent = r.raison === "trop" ? "Trop d'essais : demandez un nouveau code." : r.raison === "expire" ? "Ce code n'est plus valable : demandez-en un nouveau." : "Ce code ne correspond pas. Vérifiez-le et réessayez.";
+  } catch (err) { $("#msgCode").textContent = "Connexion impossible pour le moment. Réessayez dans un instant."; }
+  b.disabled = false;
+});
+
+$("#autreMail").addEventListener("click", () => { montrer("etapeMail"); $("#msgMail").textContent = ""; });
+$("#deconnexion").addEventListener("click", async () => {
+  const s = lire(); garder(null);
+  if (s) outil({ espace: "sortir", jeton: s.jeton }).catch(() => {});
+  montrer("etapeMail");
+});
+
+// ancienne adresse e-mail : un code part vers l'ancienne boîte, puis les séances suivent
+$("#formAncien").addEventListener("submit", async e => {
+  e.preventDefault();
+  const s = lire(), ancien = $("#ancien").value.trim().toLowerCase();
+  if (!s) return montrer("etapeMail");
+  const b = e.submitter || $("#formAncien .btn"); b.disabled = true;
+  $("#msgAncien").className = "message"; $("#msgAncien").textContent = "Envoi du code…";
+  try {
+    const r = await outil({ espace: "ancien-code", jeton: s.jeton, ancien });
+    if (r.ok) {
+      $("#msgAncien").textContent = `Un code vient de partir vers ${ancien}. Il est valable 15 minutes.`;
+      $("#formAncienCode").classList.remove("cache"); $("#ancienCode").value = ""; $("#ancienCode").focus();
+    } else $("#msgAncien").textContent = r.raison === "trop" ? "Trop de demandes pour le moment : réessayez dans une heure." : r.raison === "jeton" ? "Votre connexion a expiré : reconnectez-vous." : "Le code n'a pas pu partir. Vérifiez l'adresse.";
+  } catch (err) { $("#msgAncien").textContent = "Connexion impossible pour le moment. Réessayez dans un instant."; }
+  b.disabled = false;
+});
+$("#formAncienCode").addEventListener("submit", async e => {
+  e.preventDefault();
+  const s = lire(), ancien = $("#ancien").value.trim().toLowerCase(), code = $("#ancienCode").value.trim();
+  if (!s) return montrer("etapeMail");
+  const b = e.submitter || $("#formAncienCode .btn"); b.disabled = true;
+  $("#msgAncien").textContent = "Vérification…";
+  try {
+    const r = await outil({ espace: "ancien-entrer", jeton: s.jeton, ancien, code });
+    if (r.ok) {
+      afficher(r.seances || [], s.mail);
+      $("#formAncienCode").classList.add("cache"); $("#ancien").value = "";
+      $("#msgAncien").className = "message ok";
+      $("#msgAncien").textContent = "C'est fait : les séances de votre ancienne adresse sont maintenant dans votre espace.";
+    } else $("#msgAncien").textContent = r.raison === "trop" ? "Trop d'essais : demandez un nouveau code." : r.raison === "expire" ? "Ce code n'est plus valable : demandez-en un nouveau." : r.raison === "jeton" ? "Votre connexion a expiré : reconnectez-vous." : "Ce code ne correspond pas. Vérifiez-le et réessayez.";
+  } catch (err) { $("#msgAncien").textContent = "Connexion impossible pour le moment. Réessayez dans un instant."; }
+  b.disabled = false;
+});
+$("#sansAcces").addEventListener("click", async () => {
+  const s = lire(), ancien = $("#ancien").value.trim().toLowerCase();
+  if (!s) return montrer("etapeMail");
+  $("#msgAncien").className = "message";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ancien)) { $("#msgAncien").textContent = "Tapez d'abord votre ancienne adresse e-mail ci-dessus."; $("#ancien").focus(); return; }
+  $("#sansAcces").disabled = true; $("#msgAncien").textContent = "Recherche de vos séances…";
+  try {
+    const r = await outil({ espace: "ancien-direct", jeton: s.jeton, mail: s.mail, ancien });
+    if (r.ok) {
+      afficher(r.seances || [], s.mail); $("#ancien").value = ""; $("#formAncienCode").classList.add("cache");
+      $("#msgAncien").className = "message ok";
+      $("#msgAncien").textContent = "C'est fait : les séances de votre ancienne adresse sont maintenant dans votre espace. Diwéra vient d'en être prévenue par e-mail et pourra vous contacter pour vérifier ensemble.";
+    } else $("#msgAncien").textContent = r.raison === "inconnue" ? "Aucune séance n'est enregistrée à cette adresse. Vérifiez-la, ou écrivez à diwera.devienne@gmail.com."
+      : r.raison === "trop" ? "Trop d'essais pour aujourd'hui : écrivez à diwera.devienne@gmail.com." : r.raison === "jeton" ? "Votre connexion a expiré : reconnectez-vous." : "Vérifiez l'adresse et réessayez.";
+  } catch (err) { $("#msgAncien").textContent = "Connexion impossible pour le moment. Réessayez dans un instant."; }
+  $("#sansAcces").disabled = false;
+});
+
+// 3. afficher les séances
+function afficher(seances, mail) {
+  $("#quiEst").textContent = mail ? "Connectée avec " + mail : "";
+  const g = $("#grille");
+  g.innerHTML = seances.map(x => {
+    const s = soinPar(x.id) || { titre: x.titre || "Votre séance" };
+    return `<article class="seance">
+      <img loading="lazy" src="${echapper(image(s.img, 640, 400))}" alt="">
+      <div class="corps"><h3>${echapper(s.titre)}</h3>
+      ${x.lien === "attente"
+        ? `<p style="margin:auto 0 0;color:var(--doux);font-size:15px">Diwéra vous envoie cette séance par e-mail.</p>`
+        : `<a class="btn" href="${echapper(x.lien)}" target="_blank" rel="noopener">Regarder ma séance</a>`}</div>
+    </article>`;
+  }).join("");
+  $("#vide").classList.toggle("cache", seances.length > 0);
+  montrer("etapeSeances");
+}
+
+// au retour : déjà connectée ?
+(async () => {
+  // étoiles qui scintillent dans le ciel
+  const ciel = $("#ciel");
+  for (let i = 0; i < 22; i++) {
+    const e = document.createElement("span");
+    e.className = "etoile" + (i % 3 ? "" : " or");
+    const t = 6 + Math.random() * 12;
+    e.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 85}%;width:${t}px;height:${t}px;animation-delay:${Math.random() * 3}s`;
+    ciel.appendChild(e);
+  }
+  await chargerSoins();
+  const s = lire();
+  if (!s) return montrer("etapeMail");
+  $("#mail").value = s.mail || "";
+  try {
+    const r = await outil({ espace: "liste", jeton: s.jeton });
+    if (r.ok) return afficher(r.seances || [], s.mail);
+  } catch (e) {}
+  garder(null); montrer("etapeMail");
+})();
+</script>
+</body>
+</html>

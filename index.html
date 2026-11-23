@@ -72,6 +72,8 @@ a{color:inherit}
 .liens a{text-decoration:none;color:var(--doux)}
 .liens a:hover{color:var(--encre)}
 @media (max-width:640px){.liens{display:none}}
+.espace-tel{display:none;font-size:14px;letter-spacing:.04em;text-decoration:none;color:#200174;background:rgba(255,255,255,.85);border-radius:99px;padding:6px 16px}
+@media (max-width:640px){.espace-tel{display:inline-block}}
 
 /* Ouverture : le soleil */
 .ouverture{position:relative;overflow:hidden;--encre:#200174;--doux:#2c1c78;--or:#200174;color:var(--encre);
@@ -359,7 +361,8 @@ body{font-weight:400}
   <div class="page">
     <div class="barre">
       <a class="marque script" style="font-size:clamp(26px,3.4vw,34px)" href="#">L'Atelier fait d'Étoiles</a>
-      <nav class="liens" aria-label="Menu"><a href="#soins">Les séances</a><a href="#abus">Après un abus sexuel</a><a href="#meditations">Méditations offertes</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a></nav>
+      <nav class="liens" aria-label="Menu"><a href="#soins">Les séances</a><a href="#abus">Après un abus sexuel</a><a href="#meditations">Méditations offertes</a><a href="#comment">Comment ça marche</a><a id="lienSite" href="#">Mon site</a><a href="espace/">Mon espace</a></nav>
+      <a class="espace-tel" href="espace/">✨ Mon espace : mes séances</a>
     </div>
     <div class="ouverture-grille">
       <div>
